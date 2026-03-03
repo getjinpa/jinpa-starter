@@ -21,7 +21,7 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0F00-0FFF, U+0020-007E;
+  unicode-range: U+0F00-0FFF;
 }
 
 /* Noto Serif Tibetan — modern, screen-optimised */
@@ -31,7 +31,7 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0F00-0FFF, U+0020-007E;
+  unicode-range: U+0F00-0FFF;
 }
 @font-face {
   font-family: 'Noto Serif Tibetan';
@@ -39,7 +39,7 @@
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0F00-0FFF, U+0020-007E;
+  unicode-range: U+0F00-0FFF;
 }
 
 /* Noto Sans Tibetan — clean sans-serif for UI/headings */
@@ -49,7 +49,7 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0F00-0FFF, U+0020-007E;
+  unicode-range: U+0F00-0FFF;
 }
 
 /* Qomolangma Uchen Sarchen — THDL Qomolangma project, formal large Uchen */
@@ -59,7 +59,7 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0F00-0FFF, U+0020-007E;
+  unicode-range: U+0F00-0FFF;
 }
 
 /* Qomolangma Betsu — compact Uchen style */
@@ -69,7 +69,7 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0F00-0FFF, U+0020-007E;
+  unicode-range: U+0F00-0FFF;
 }
 
 /* Qomolangma Tsutong — short-headed display Uchen */
@@ -79,7 +79,7 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0F00-0FFF, U+0020-007E;
+  unicode-range: U+0F00-0FFF;
 }
 
 /* --------------------------------------------------------------------------
@@ -1309,12 +1309,13 @@ html[data-theme="dark"] .site-header {
    ========================================================================== */
 
 /* Base rule: applied to any element with the Tibetan language attribute.
-   Tibetan glyphs render ~15% smaller visually than Latin at the same font-size,
-   so 1.1em is used to restore visual parity. */
+   unicode-range on all Tibetan @font-face is U+0F00-0FFF only, so Latin
+   characters inside [lang="bo"] elements automatically fall through to
+   var(--font-body) = Inter. No font-size override — termaUI explicitly
+   warns against this because 1.1em compounds through nested elements. */
 :lang(bo),
 [lang="bo"] {
-  font-family: 'Jomolhari', 'Noto Serif Tibetan', 'Qomolangma Uchen Sarchen', serif;
-  font-size: 1.1em;
+  font-family: 'Jomolhari', 'Noto Serif Tibetan', 'Qomolangma Uchen Sarchen', var(--font-body), serif;
   line-height: 1.8;          /* critical — Tibetan vowel marks extend above the baseline */
   word-break: keep-all;      /* prevents the browser from breaking at every tsheg (་) */
   overflow-wrap: anywhere;   /* fallback for very long strings without tsheg */
@@ -1336,8 +1337,17 @@ article[lang="bo"],
 [lang="bo"] h1,
 [lang="bo"] h2,
 [lang="bo"] h3 {
-  font-family: 'Noto Serif Tibetan', 'Jomolhari', 'Qomolangma Uchen Sarchen', serif;
+  font-family: 'Noto Serif Tibetan', 'Jomolhari', 'Qomolangma Uchen Sarchen', var(--font-body), serif;
   line-height: 1.6;
+}
+
+/* Tags inside a Tibetan article must keep their original line-height and size —
+   the 1.8 line-height from [lang="bo"] would make Tibetan-script tags twice as
+   tall as English ones. Tags are UI chrome, not body text. */
+article[lang="bo"] .tag,
+[lang="bo"] .tag {
+  line-height: 1.2;
+  font-size: var(--font-size-xs);
 }
 
 /* Prevent double-shad (། །) from splitting across lines */
