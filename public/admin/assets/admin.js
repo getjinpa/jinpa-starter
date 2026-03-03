@@ -316,6 +316,31 @@
     return result.join('\n');
   }
 
+  /**
+   * Sanitize HTML before inserting into the preview pane.
+   * Strips <script> tags and inline event handlers (onerror, onclick, etc.)
+   * so user-written markdown cannot execute arbitrary JS in the preview.
+   * Uses DOMParser which is available in all modern browsers.
+   */
+  function sanitizePreviewHtml(html) {
+    try {
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      // Remove all <script> elements
+      doc.querySelectorAll('script').forEach(function (el) { el.remove(); });
+      // Strip inline event handler attributes from every element
+      doc.querySelectorAll('*').forEach(function (el) {
+        for (var i = el.attributes.length - 1; i >= 0; i--) {
+          if (/^on/i.test(el.attributes[i].name)) {
+            el.removeAttribute(el.attributes[i].name);
+          }
+        }
+      });
+      return doc.body.innerHTML;
+    } catch (_) {
+      return '';
+    }
+  }
+
   // ==========================================================================
   // SECTION 4: Toast Notifications
   // ==========================================================================
@@ -1518,12 +1543,12 @@
       previewBtn.classList.toggle('active');
       previewPane.classList.toggle('visible');
       if (previewPane.classList.contains('visible')) {
-        previewPane.innerHTML = markdownToHtml(editorTA.value);
+        previewPane.innerHTML = sanitizePreviewHtml(markdownToHtml(editorTA.value));
       }
     });
     editorTA.addEventListener('input', debounce(function () {
       if (previewPane.classList.contains('visible')) {
-        previewPane.innerHTML = markdownToHtml(editorTA.value);
+        previewPane.innerHTML = sanitizePreviewHtml(markdownToHtml(editorTA.value));
       }
     }, 300));
 
@@ -1759,12 +1784,12 @@
       previewBtn.classList.toggle('active');
       previewPane.classList.toggle('visible');
       if (previewPane.classList.contains('visible')) {
-        previewPane.innerHTML = markdownToHtml(editorTA.value);
+        previewPane.innerHTML = sanitizePreviewHtml(markdownToHtml(editorTA.value));
       }
     });
     editorTA.addEventListener('input', debounce(function () {
       if (previewPane.classList.contains('visible')) {
-        previewPane.innerHTML = markdownToHtml(editorTA.value);
+        previewPane.innerHTML = sanitizePreviewHtml(markdownToHtml(editorTA.value));
       }
     }, 300));
 

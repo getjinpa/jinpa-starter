@@ -46,7 +46,7 @@
 
   "seo": {
     "titleTemplate": "%s — Tsering Dolma",
-    "ogImage": "/site/og-default.jpg",
+    "ogImage": "",
     "twitterCard": "summary_large_image",
     "twitterHandle": "dalailama"
   },

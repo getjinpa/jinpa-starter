@@ -37,6 +37,7 @@ const pages = defineCollection({
     image: z.string().optional(),      // URL string
     layout: z.string().default('Page'),
     lang: z.string().default('en'),
+    draft: z.boolean().default(false),
     order: z.number().default(0),
     parent: z.string().optional(),
     show_in_nav: z.boolean().default(true),
