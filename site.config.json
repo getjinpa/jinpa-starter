@@ -1,0 +1,60 @@
+{
+  "$schema": "https://jinpa.dev/schemas/site.config.v1.json",
+  "version": 1,
+
+  "site": {
+    "title": "My Website",
+    "description": "A personal website and blog.",
+    "url": "https://username.github.io",
+    "basePath": "",
+    "language": "en",
+    "languages": ["en"],
+    "timezone": "America/New_York",
+    "author": {
+      "name": "Your Name",
+      "email": "",
+      "url": ""
+    }
+  },
+
+  "navigation": {
+    "main": [
+      { "label": "Home", "url": "/" },
+      { "label": "Blog", "url": "/posts/" },
+      { "label": "About", "url": "/about/" }
+    ],
+    "footer": [
+      { "label": "Privacy", "url": "/privacy/" }
+    ],
+    "social": [
+      { "platform": "github", "url": "" },
+      { "platform": "twitter", "url": "" }
+    ]
+  },
+
+  "content": {
+    "postsPerPage": 10,
+    "excerptLength": 200,
+    "dateFormat": "MMMM D, YYYY",
+    "showAuthor": true,
+    "showDate": true,
+    "showTags": true,
+    "showShareButtons": false,
+    "showReadTime": true
+  },
+
+  "seo": {
+    "titleTemplate": "%s — My Website",
+    "ogImage": "/site/og-default.jpg",
+    "twitterCard": "summary_large_image",
+    "twitterHandle": ""
+  },
+
+  "analytics": {
+    "provider": null,
+    "id": ""
+  },
+
+  "customContentTypes": [],
+  "activePlugins": ["reading-progress"]
+}

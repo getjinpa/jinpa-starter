@@ -1,0 +1,48 @@
+{
+  "$schema": "https://jinpa.dev/schemas/plugin.manifest.v1.json",
+  "specVersion": 1,
+  "name": "Reading Progress",
+  "slug": "reading-progress",
+  "version": "1.0.0",
+  "description": "A reading progress bar that shows how far through a post the reader has scrolled.",
+  "author": "Jinpa Team",
+  "authorUrl": "https://jinpa.dev",
+  "license": "free",
+  "homepage": "https://jinpa.dev/plugins/reading-progress",
+  "repository": "https://github.com/jinpa-platform/plugin-reading-progress",
+  "compatibility": {
+    "jinpa": ">=1.0.0",
+    "astro": ">=5.0.0"
+  },
+  "provides": {
+    "components": [
+      {
+        "name": "ReadingProgress",
+        "file": "components/ReadingProgress.astro",
+        "framework": "astro",
+        "hydration": "client:idle",
+        "description": "A thin progress bar at the top of the page showing reading progress",
+        "props": {
+          "color": { "type": "string", "default": "var(--color-primary)" },
+          "height": { "type": "string", "default": "3px" },
+          "zIndex": { "type": "string", "default": "9999" },
+          "showPercentage": { "type": "boolean", "default": false }
+        }
+      }
+    ],
+    "styles": ["styles/reading-progress.css"],
+    "contentTypes": [],
+    "adminExtensions": []
+  },
+  "integration": "integration.js",
+  "frontmatter": { "fields": [] },
+  "hooks": {
+    "onInstall": "scripts/install.js",
+    "onUninstall": "scripts/uninstall.js"
+  },
+  "dependencies": [],
+  "assets": {
+    "icon": "assets/icon.svg",
+    "screenshots": ["assets/screenshot-1.png"]
+  }
+}

@@ -1,0 +1,19 @@
+---
+import Navigation from './Navigation.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import siteConfig from '../../../site.config.json';
+import { withBase } from '../../utils/paths';
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href={withBase('/')} class="site-logo">
+      <span>{siteConfig.site.title}</span>
+    </a>
+
+    <div class="header-actions">
+      <Navigation />
+      <ThemeToggle />
+    </div>
+  </div>
+</header>

@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/core/PostList.astro';
+import Pagination from '../../components/core/Pagination.astro';
+import { getCollection } from 'astro:content';
+import siteConfig from '../../../site.config.json';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const perPage = siteConfig.content?.postsPerPage || 10;
+const totalPages = Math.ceil(sortedPosts.length / perPage);
+const currentPage = 1;
+const paginatedPosts = sortedPosts.slice(0, perPage);
+---
+
+<Base title="All Posts" description="Browse all blog posts">
+  <div class="container">
+    <header class="page-header">
+      <h1 class="page-header-title">All Posts</h1>
+      <p class="page-header-description">
+        Thoughts, ideas, and stories
+      </p>
+    </header>
+
+    <PostList posts={paginatedPosts} />
+
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      baseUrl="/posts/"
+    />
+  </div>
+</Base>

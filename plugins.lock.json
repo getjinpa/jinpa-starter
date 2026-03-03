@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "plugins": [
+    {
+      "slug": "reading-progress",
+      "version": "1.0.0",
+      "installedAt": "2026-02-25T00:00:00Z",
+      "active": true
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+---
+import Base from './Base.astro';
+import TableOfContents from '../components/core/TableOfContents.astro';
+import ReadTime from '../components/core/ReadTime.astro';
+import Share from '../components/core/Share.astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  title: string;
+  date: Date;
+  description?: string;
+  author?: string;
+  image?: ImageMetadata;
+  image_alt?: string;
+  tags?: string[];
+  headings?: { depth: number; slug: string; text: string }[];
+  content?: string;
+}
+
+const {
+  title,
+  date,
+  description,
+  author,
+  image,
+  image_alt,
+  tags = [],
+  headings = [],
+  content = '',
+} = Astro.props;
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const shareUrl = Astro.url.href;
+---
+
+<Base title={title} description={description} image={image?.src} article={true}>
+  <slot name="before-content" />
+
+  <article class="post-article">
+    <header class="post-header container">
+      <div class="content-width">
+        {tags.length > 0 && (
+          <div class="post-card-tags" style="justify-content: center; margin-bottom: var(--space-4);">
+            {tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )}
+        <h1 class="post-header-title">{title}</h1>
+        <div class="post-header-meta">
+          {author && <span>{author}</span>}
+          {author && <span class="separator" />}
+          <time datetime={date.toISOString()}>{formattedDate}</time>
+          <span class="separator" />
+          <ReadTime content={content} />
+        </div>
+      </div>
+    </header>
+
+    {image && (
+      <div class="post-featured-image container">
+        <Image
+          src={image}
+          alt={image_alt || title}
+          width={1200}
+          height={630}
+        />
+      </div>
+    )}
+
+    <div class="page-content">
+      <slot name="sidebar">
+        {headings.length > 0 && (
+          <TableOfContents headings={headings} />
+        )}
+      </slot>
+
+      <div class="post-content">
+        <slot />
+      </div>
+
+      <Share url={shareUrl} title={title} />
+    </div>
+  </article>
+
+  <slot name="after-content" />
+</Base>

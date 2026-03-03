@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import { withBase } from '../../utils/paths';
+
+interface Props {
+  post: any;
+}
+
+const { post } = Astro.props;
+const { title, date, description, excerpt, image, image_alt, tags = [] } = post.data;
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+
+const postUrl = withBase(`/posts/${post.id}/`);
+const displayExcerpt = excerpt || description || '';
+
+// Calculate reading time from body
+const words = post.body ? post.body.split(/\s+/).length : 0;
+const readingTime = Math.max(1, Math.ceil(words / 200));
+---
+
+<article class="post-card">
+  {image && (
+    <a href={postUrl} class="post-card-image" aria-hidden="true" tabindex="-1">
+      <Image
+        src={image}
+        alt={image_alt || title}
+        width={600}
+        height={338}
+      />
+    </a>
+  )}
+
+  <div class="post-card-body">
+    <div class="post-card-meta">
+      <time datetime={new Date(date).toISOString()}>{formattedDate}</time>
+      <span>&middot;</span>
+      <span>{readingTime} min read</span>
+    </div>
+
+    <h2 class="post-card-title">
+      <a href={postUrl}>{title}</a>
+    </h2>
+
+    {displayExcerpt && (
+      <p class="post-card-excerpt">{displayExcerpt}</p>
+    )}
+
+    {tags.length > 0 && (
+      <div class="post-card-tags">
+        {tags.slice(0, 3).map((tag: string) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+</article>

@@ -1,0 +1,88 @@
+---
+import siteConfig from '../../../site.config.json';
+import { withBase, stripBase } from '../../utils/paths';
+
+const navItems = siteConfig.navigation?.main || [];
+const localPath = stripBase(Astro.url.pathname);
+---
+
+<nav class="main-nav" aria-label="Main navigation">
+  <ul class="nav-links">
+    {navItems.map((item: { label: string; url: string }) => (
+      <li>
+        <a
+          href={withBase(item.url)}
+          class:list={['nav-link', { active: localPath === item.url || (item.url !== '/' && localPath.startsWith(item.url)) }]}
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <button
+    class="mobile-menu-toggle"
+    aria-label="Toggle menu"
+    aria-expanded="false"
+    data-menu-toggle
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
+      <line x1="4" x2="20" y1="12" y2="12" />
+      <line x1="4" x2="20" y1="6" y2="6" />
+      <line x1="4" x2="20" y1="18" y2="18" />
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="close-icon" style="display: none;">
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  </button>
+</nav>
+
+<div class="mobile-nav" data-mobile-nav>
+  <ul class="mobile-nav-links">
+    {navItems.map((item: { label: string; url: string }) => (
+      <li>
+        <a
+          href={withBase(item.url)}
+          class:list={['mobile-nav-link', { active: localPath === item.url || (item.url !== '/' && localPath.startsWith(item.url)) }]}
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<script>
+  function initMobileMenu() {
+    const toggle = document.querySelector('[data-menu-toggle]');
+    const mobileNav = document.querySelector('[data-mobile-nav]');
+    const menuIcon = toggle?.querySelector('.menu-icon') as HTMLElement | null;
+    const closeIcon = toggle?.querySelector('.close-icon') as HTMLElement | null;
+
+    if (!toggle || !mobileNav || !menuIcon || !closeIcon) return;
+
+    toggle.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      menuIcon.style.display = isOpen ? 'none' : 'block';
+      closeIcon.style.display = isOpen ? 'block' : 'none';
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Close on link click
+    mobileNav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        menuIcon.style.display = 'block';
+        closeIcon.style.display = 'none';
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
+  // Run on initial load and after view transitions
+  initMobileMenu();
+  document.addEventListener('astro:after-swap', initMobileMenu);
+</script>

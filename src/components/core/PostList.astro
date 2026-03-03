@@ -1,0 +1,23 @@
+---
+import PostCard from './PostCard.astro';
+
+interface Props {
+  posts: any[];
+  limit?: number;
+}
+
+const { posts, limit } = Astro.props;
+const displayPosts = limit ? posts.slice(0, limit) : posts;
+---
+
+<div class="post-grid">
+  {displayPosts.map((post) => (
+    <PostCard post={post} />
+  ))}
+</div>
+
+{displayPosts.length === 0 && (
+  <p style="text-align: center; color: var(--color-text-muted); padding: var(--space-12) 0;">
+    No posts yet. Check back soon!
+  </p>
+)}

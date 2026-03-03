@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/core/PostList.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '../utils/paths';
+import siteConfig from '../../site.config.json';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+const recentPosts = sortedPosts.slice(0, siteConfig.content?.postsPerPage || 10);
+---
+
+<Base>
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title">{siteConfig.site.title}</h1>
+      <p class="hero-description">{siteConfig.site.description}</p>
+      <a href={withBase('/posts/')} class="hero-cta">
+        Read the blog
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Recent Posts</h2>
+        <a href={withBase('/posts/')} class="section-link">
+          View all
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+      <PostList posts={recentPosts} />
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,33 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<Base title={title} description={description}>
+  <slot name="before-content" />
+
+  <article class="page-article">
+    <header class="page-header container">
+      <div class="content-width">
+        <h1 class="page-header-title">{title}</h1>
+        {description && (
+          <p class="page-header-description">{description}</p>
+        )}
+      </div>
+    </header>
+
+    <div class="page-content">
+      <div class="post-content">
+        <slot />
+      </div>
+    </div>
+  </article>
+
+  <slot name="after-content" />
+</Base>

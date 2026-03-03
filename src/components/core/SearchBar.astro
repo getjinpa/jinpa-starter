@@ -1,0 +1,39 @@
+---
+// Pagefind search integration
+// Pagefind generates its index at build time in /pagefind/
+import { withBase } from '../../utils/paths';
+const pagefindCss = withBase('/pagefind/pagefind-ui.css');
+const pagefindJs = withBase('/pagefind/pagefind-ui.js');
+---
+
+<div class="search-container" id="search">
+  <div id="pagefind-search" data-pagefind-js={pagefindJs}></div>
+</div>
+
+<link href={pagefindCss} rel="stylesheet" />
+
+<script>
+  async function initPagefind() {
+    const el = document.getElementById('pagefind-search');
+    if (!el) return;
+
+    const pagefindJs = el.dataset.pagefindJs;
+    if (!pagefindJs) return;
+
+    try {
+      // @ts-ignore - Pagefind is loaded at runtime
+      const { PagefindUI } = await import(/* @vite-ignore */ pagefindJs);
+      new PagefindUI({
+        element: '#pagefind-search',
+        showSubResults: true,
+        showImages: false,
+      });
+    } catch {
+      // Pagefind not available (e.g., during dev)
+      el.innerHTML = '<p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">Search is available after building the site.</p>';
+    }
+  }
+
+  initPagefind();
+  document.addEventListener('astro:after-swap', initPagefind);
+</script>

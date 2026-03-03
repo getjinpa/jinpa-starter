@@ -1,0 +1,28 @@
+---
+import { withBase } from '../../utils/paths';
+
+interface BreadcrumbItem {
+  label: string;
+  url?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href={withBase('/')}>Home</a>
+  {items.map((item, index) => (
+    <>
+      <span class="breadcrumb-separator" aria-hidden="true">/</span>
+      {index === items.length - 1 || !item.url ? (
+        <span class="breadcrumb-current" aria-current="page">{item.label}</span>
+      ) : (
+        <a href={withBase(item.url)}>{item.label}</a>
+      )}
+    </>
+  ))}
+</nav>

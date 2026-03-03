@@ -1,0 +1,54 @@
+{
+  "$schema": "https://jinpa.dev/schemas/plugin.manifest.v1.json",
+  "specVersion": 1,
+  "name": "Social Share Enhanced",
+  "slug": "social-share-enhanced",
+  "version": "1.0.0",
+  "description": "Enhanced social sharing with support for WhatsApp, Telegram, Reddit, Email, and Copy Link, plus a floating mobile share button.",
+  "author": "Jinpa Team",
+  "authorUrl": "https://jinpa.dev",
+  "license": "free",
+  "homepage": "https://jinpa.dev/plugins/social-share-enhanced",
+  "repository": "https://github.com/jinpa-platform/plugin-social-share-enhanced",
+  "compatibility": {
+    "jinpa": ">=1.0.0",
+    "astro": ">=5.0.0"
+  },
+  "provides": {
+    "components": [
+      {
+        "name": "SocialShareEnhanced",
+        "file": "components/SocialShareEnhanced.astro",
+        "framework": "astro",
+        "hydration": "client:visible",
+        "description": "Enhanced share bar with animated icons for multiple platforms. Includes a floating mobile share button.",
+        "props": {
+          "url": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string", "default": "" },
+          "platforms": {
+            "type": "array",
+            "default": ["twitter", "facebook", "linkedin", "whatsapp", "telegram", "reddit", "email", "copy"]
+          },
+          "layout": { "type": "string", "default": "inline" },
+          "showLabels": { "type": "boolean", "default": false },
+          "showFloatingButton": { "type": "boolean", "default": true }
+        }
+      }
+    ],
+    "styles": ["styles/social-share.css"],
+    "contentTypes": [],
+    "adminExtensions": []
+  },
+  "integration": "integration.js",
+  "frontmatter": { "fields": [] },
+  "hooks": {
+    "onInstall": "scripts/install.js",
+    "onUninstall": "scripts/uninstall.js"
+  },
+  "dependencies": [],
+  "assets": {
+    "icon": "assets/icon.svg",
+    "screenshots": []
+  }
+}

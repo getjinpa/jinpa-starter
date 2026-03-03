@@ -1,0 +1,255 @@
+/*
+ * Social Share Enhanced Plugin — Styles
+ *
+ * All classes are prefixed with "social-share-enhanced-" to satisfy the
+ * Jinpa plugin conflict resolution rules.
+ */
+
+/* ===================================================================== */
+/*  Share Bar                                                            */
+/* ===================================================================== */
+
+.social-share-enhanced-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--color-border, #e2e8f0);
+  margin-top: 2rem;
+}
+
+.social-share-enhanced-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ===================================================================== */
+/*  Label                                                                */
+/* ===================================================================== */
+
+.social-share-enhanced-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #64748b);
+  margin-right: 0.25rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ===================================================================== */
+/*  Share Buttons                                                        */
+/* ===================================================================== */
+
+.social-share-enhanced-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border, #e2e8f0);
+  background: var(--color-surface, #f8fafc);
+  color: var(--color-text-muted, #64748b);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 200ms ease;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+}
+
+.social-share-enhanced-btn:hover,
+.social-share-enhanced-btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: transparent;
+}
+
+.social-share-enhanced-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #2563eb);
+  outline-offset: 2px;
+}
+
+.social-share-enhanced-btn:active {
+  transform: translateY(0);
+}
+
+/* When labels are shown, switch to pill shape */
+.social-share-enhanced-bar:has(.social-share-enhanced-btn-label) .social-share-enhanced-btn {
+  width: auto;
+  border-radius: 999px;
+  padding: 0 0.75rem;
+}
+
+/* ===================================================================== */
+/*  Icon wrapper                                                         */
+/* ===================================================================== */
+
+.social-share-enhanced-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+/* ===================================================================== */
+/*  Button label text                                                    */
+/* ===================================================================== */
+
+.social-share-enhanced-btn-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+/* ===================================================================== */
+/*  Per-platform hover colours                                           */
+/* ===================================================================== */
+
+.social-share-enhanced-btn--twitter:hover {
+  background: #1da1f2;
+  color: #fff;
+}
+
+.social-share-enhanced-btn--facebook:hover {
+  background: #1877f2;
+  color: #fff;
+}
+
+.social-share-enhanced-btn--linkedin:hover {
+  background: #0a66c2;
+  color: #fff;
+}
+
+.social-share-enhanced-btn--whatsapp:hover {
+  background: #25d366;
+  color: #fff;
+}
+
+.social-share-enhanced-btn--telegram:hover {
+  background: #0088cc;
+  color: #fff;
+}
+
+.social-share-enhanced-btn--reddit:hover {
+  background: #ff4500;
+  color: #fff;
+}
+
+.social-share-enhanced-btn--email:hover {
+  background: #6366f1;
+  color: #fff;
+}
+
+.social-share-enhanced-btn--copy:hover {
+  background: var(--color-primary, #2563eb);
+  color: #fff;
+}
+
+/* Copied state */
+.social-share-enhanced-btn--copied {
+  background: #10b981 !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* ===================================================================== */
+/*  Floating Action Button (mobile)                                      */
+/* ===================================================================== */
+
+.social-share-enhanced-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 900;
+  display: none; /* Hidden on desktop */
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary, #2563eb);
+  color: #fff;
+  cursor: pointer;
+  box-shadow:
+    0 4px 14px rgba(37, 99, 235, 0.35),
+    0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: all 200ms ease;
+}
+
+.social-share-enhanced-fab:hover {
+  transform: scale(1.08);
+  box-shadow:
+    0 6px 20px rgba(37, 99, 235, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.social-share-enhanced-fab:active {
+  transform: scale(0.96);
+}
+
+/* Show on smaller screens */
+@media (max-width: 768px) {
+  .social-share-enhanced-fab {
+    display: flex;
+  }
+}
+
+/* ===================================================================== */
+/*  Highlight animation (when FAB scrolls to bar)                        */
+/* ===================================================================== */
+
+.social-share-enhanced-highlight {
+  animation: social-share-enhanced-pulse 600ms ease-out;
+}
+
+@keyframes social-share-enhanced-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(37, 99, 235, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+
+/* ===================================================================== */
+/*  Dark mode                                                            */
+/* ===================================================================== */
+
+[data-theme="dark"] .social-share-enhanced-bar,
+.dark .social-share-enhanced-bar {
+  border-top-color: var(--color-border, #334155);
+}
+
+[data-theme="dark"] .social-share-enhanced-btn,
+.dark .social-share-enhanced-btn {
+  background: var(--color-surface, #1e293b);
+  border-color: var(--color-border, #334155);
+  color: var(--color-text-muted, #94a3b8);
+}
+
+[data-theme="dark"] .social-share-enhanced-fab,
+.dark .social-share-enhanced-fab {
+  box-shadow:
+    0 4px 14px rgba(96, 165, 250, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ===================================================================== */
+/*  Reduced motion                                                       */
+/* ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .social-share-enhanced-btn,
+  .social-share-enhanced-fab {
+    transition: none;
+  }
+  .social-share-enhanced-highlight {
+    animation: none;
+  }
+}

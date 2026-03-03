@@ -1,0 +1,68 @@
+---
+import { withBase } from '../../utils/paths';
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+function getPageUrl(page: number): string {
+  if (page === 1) return withBase(baseUrl);
+  return withBase(`${baseUrl}${page}/`);
+}
+
+// Generate page numbers with ellipsis
+function getPageNumbers(): (number | string)[] {
+  const pages: (number | string)[] = [];
+  const delta = 1;
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === totalPages ||
+      (i >= currentPage - delta && i <= currentPage + delta)
+    ) {
+      pages.push(i);
+    } else if (pages[pages.length - 1] !== '...') {
+      pages.push('...');
+    }
+  }
+
+  return pages;
+}
+
+const pageNumbers = getPageNumbers();
+const hasPrev = currentPage > 1;
+const hasNext = currentPage < totalPages;
+---
+
+{totalPages > 1 && (
+  <nav class="pagination" aria-label="Page navigation">
+    {hasPrev && (
+      <a href={getPageUrl(currentPage - 1)} class="pagination-link pagination-prev" aria-label="Previous page">
+        &larr; Prev
+      </a>
+    )}
+
+    {pageNumbers.map((page) =>
+      typeof page === 'number' ? (
+        page === currentPage ? (
+          <span class="pagination-current" aria-current="page">{page}</span>
+        ) : (
+          <a href={getPageUrl(page)} class="pagination-link">{page}</a>
+        )
+      ) : (
+        <span class="pagination-ellipsis">{page}</span>
+      )
+    )}
+
+    {hasNext && (
+      <a href={getPageUrl(currentPage + 1)} class="pagination-link pagination-next" aria-label="Next page">
+        Next &rarr;
+      </a>
+    )}
+  </nav>
+)}

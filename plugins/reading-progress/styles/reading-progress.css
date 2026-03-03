@@ -1,0 +1,95 @@
+/*
+ * Reading Progress Plugin — Styles
+ *
+ * All classes are prefixed with "reading-progress-" to satisfy the
+ * Jinpa plugin conflict resolution rules (CSS classes MUST be prefixed
+ * with the plugin slug).
+ *
+ * Custom properties set by the component inline styles:
+ *   --rp-color   : bar fill color
+ *   --rp-height  : bar thickness
+ *   --rp-z       : z-index
+ */
+
+/* ------------------------------------------------------------------ */
+/*  Container — fixed full-width strip at the top of the viewport     */
+/* ------------------------------------------------------------------ */
+
+.reading-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--rp-height, 3px);
+  z-index: var(--rp-z, 9999);
+  pointer-events: none;
+  background: transparent;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Bar — the coloured fill that grows with scroll progress           */
+/* ------------------------------------------------------------------ */
+
+.reading-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--rp-color, var(--color-primary, #2563eb));
+  border-radius: 0 2px 2px 0;
+  transition: width 80ms linear;
+  will-change: width;
+
+  /* Subtle glow for a polished look */
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Percentage badge — optional floating indicator                    */
+/* ------------------------------------------------------------------ */
+
+.reading-progress-badge {
+  position: fixed;
+  top: calc(var(--rp-height, 3px) + 8px);
+  right: 16px;
+  z-index: var(--rp-z, 9999);
+  pointer-events: none;
+
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+  color: var(--rp-color, var(--color-primary, #2563eb));
+  background: var(--color-surface, #f8fafc);
+  border: 1px solid var(--rp-color, var(--color-primary, #2563eb));
+  border-radius: 999px;
+
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Dark mode adjustments                                             */
+/* ------------------------------------------------------------------ */
+
+[data-theme="dark"] .reading-progress-bar,
+.dark .reading-progress-bar {
+  box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
+}
+
+[data-theme="dark"] .reading-progress-badge,
+.dark .reading-progress-badge {
+  background: var(--color-surface, #1e293b);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reduced motion preference                                         */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress-bar {
+    transition: none;
+  }
+  .reading-progress-badge {
+    transition: none;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "jinpa-starter-blog",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A beautiful starter blog template built with Jinpa and Astro",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.15",
+    "@astrojs/sitemap": "^3.7.0",
+    "astro": "^5.17.1"
+  }
+}

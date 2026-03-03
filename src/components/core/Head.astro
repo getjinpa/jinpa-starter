@@ -1,0 +1,93 @@
+---
+import siteConfig from '../../../site.config.json';
+import { withBase } from '../../utils/paths';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+}
+
+const {
+  title,
+  description = siteConfig.site.description,
+  image = siteConfig.seo?.ogImage,
+  article = false,
+} = Astro.props;
+
+const siteUrl = siteConfig.site.url;
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = image ? new URL(withBase(image), siteUrl).href : undefined;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="author" content={siteConfig.site.author?.name} />
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={article ? 'article' : 'website'} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+<meta property="og:site_name" content={siteConfig.site.title} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content={siteConfig.seo?.twitterCard || "summary_large_image"} />
+<meta property="twitter:url" content={canonicalUrl} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+{ogImage && <meta property="twitter:image" content={ogImage} />}
+
+<!-- RSS -->
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={siteConfig.site.title}
+  href={new URL(withBase('/rss.xml'), siteUrl).href}
+/>
+
+<!-- Structured Data -->
+{article ? (
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description: description,
+      image: ogImage,
+      url: canonicalUrl,
+      author: {
+        '@type': 'Person',
+        name: siteConfig.site.author?.name,
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: siteConfig.site.title,
+      },
+    })}
+  />
+) : (
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: siteConfig.site.title,
+      description: siteConfig.site.description,
+      url: new URL(withBase('/'), siteUrl).href,
+    })}
+  />
+)}

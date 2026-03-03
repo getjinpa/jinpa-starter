@@ -1,0 +1,269 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://jinpa.dev/schemas/plugin.manifest.v1.json",
+  "title": "Jinpa Plugin Manifest",
+  "description": "Schema for Jinpa platform plugin manifest files (v1).",
+  "type": "object",
+  "required": [
+    "specVersion",
+    "name",
+    "slug",
+    "version",
+    "description",
+    "author",
+    "license",
+    "compatibility",
+    "provides",
+    "integration"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema URI for editor validation.",
+      "format": "uri"
+    },
+    "specVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Manifest specification version. Currently 1."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Human-readable plugin name."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 60,
+      "description": "URL-safe identifier. Lowercase alphanumeric with hyphens only."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+",
+      "description": "Semantic version string (e.g. \"1.0.0\")."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 300,
+      "description": "Short description of what the plugin does."
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Plugin author name or organisation."
+    },
+    "authorUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Author website URL."
+    },
+    "license": {
+      "type": "string",
+      "enum": ["free", "MIT", "Apache-2.0", "GPL-3.0", "proprietary"],
+      "description": "Plugin license identifier."
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "description": "Plugin homepage or documentation URL."
+    },
+    "repository": {
+      "type": "string",
+      "format": "uri",
+      "description": "Source code repository URL."
+    },
+    "compatibility": {
+      "type": "object",
+      "required": ["jinpa", "astro"],
+      "properties": {
+        "jinpa": {
+          "type": "string",
+          "description": "Required Jinpa platform version range (e.g. \">=1.0.0\")."
+        },
+        "astro": {
+          "type": "string",
+          "description": "Required Astro version range (e.g. \">=5.0.0\")."
+        }
+      },
+      "additionalProperties": false
+    },
+    "provides": {
+      "type": "object",
+      "required": ["components", "styles", "contentTypes", "adminExtensions"],
+      "properties": {
+        "components": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/componentDef" },
+          "description": "Components provided by this plugin."
+        },
+        "styles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Relative paths to CSS files."
+        },
+        "contentTypes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Custom content type slugs registered by this plugin."
+        },
+        "adminExtensions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Admin panel extension identifiers."
+        }
+      },
+      "additionalProperties": false
+    },
+    "integration": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Relative path to the Astro integration entry file."
+    },
+    "frontmatter": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/frontmatterField" },
+          "description": "Frontmatter fields injected by this plugin. Field names MUST be prefixed with the plugin slug."
+        }
+      },
+      "additionalProperties": false
+    },
+    "hooks": {
+      "type": "object",
+      "properties": {
+        "onInstall": {
+          "type": "string",
+          "description": "Relative path to install hook script."
+        },
+        "onUninstall": {
+          "type": "string",
+          "description": "Relative path to uninstall hook script."
+        }
+      },
+      "additionalProperties": false
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Slugs of other Jinpa plugins this plugin depends on."
+    },
+    "assets": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": "string",
+          "description": "Relative path to the plugin icon (SVG recommended)."
+        },
+        "screenshots": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Relative paths to screenshot images."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "componentDef": {
+      "type": "object",
+      "required": ["name", "file"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Component name (PascalCase)."
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to the component file."
+        },
+        "framework": {
+          "type": "string",
+          "enum": ["astro", "react", "vue", "svelte", "solid", "preact"],
+          "default": "astro",
+          "description": "UI framework the component is written in."
+        },
+        "hydration": {
+          "type": "string",
+          "enum": [
+            "none",
+            "client:load",
+            "client:idle",
+            "client:visible",
+            "client:media",
+            "client:only"
+          ],
+          "default": "client:visible",
+          "description": "Astro hydration directive. Default is client:visible."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the component."
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/propDef"
+          },
+          "description": "Component props definition."
+        }
+      },
+      "additionalProperties": false
+    },
+    "propDef": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["string", "number", "boolean", "object", "array"],
+          "description": "TypeScript-like type of the prop."
+        },
+        "default": {
+          "description": "Default value for the prop."
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "frontmatterField": {
+      "type": "object",
+      "required": ["name", "type", "appliesTo", "description"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Field name. MUST be prefixed with the plugin slug (e.g. \"my-plugin_fieldName\")."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["string", "number", "boolean", "date", "array", "object"],
+          "description": "Data type of the field."
+        },
+        "appliesTo": {
+          "type": "string",
+          "description": "Content type this field applies to (e.g. \"post\", \"page\", \"*\" for all)."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of what the field does."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

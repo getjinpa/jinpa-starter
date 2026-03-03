@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://jinpa.dev/schemas/site.config.v1.json",
+  "title": "Jinpa Site Configuration",
+  "description": "Schema for Jinpa platform site.config.json files (v1).",
+  "type": "object",
+  "required": ["version", "site"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "JSON Schema URI for editor validation."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Configuration schema version."
+    },
+    "site": {
+      "type": "object",
+      "required": ["title", "url", "language"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Site title shown in browser tabs and SEO."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Default site meta description."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical base URL of the site."
+        },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+          "description": "Primary language code (e.g. \"en\", \"en-US\")."
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+          },
+          "description": "All supported language codes."
+        },
+        "timezone": {
+          "type": "string",
+          "description": "IANA timezone (e.g. \"America/New_York\")."
+        },
+        "author": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" },
+            "url": { "type": "string", "format": "uri" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "navigation": {
+      "type": "object",
+      "properties": {
+        "main": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/navItem" },
+          "description": "Primary navigation links."
+        },
+        "footer": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/navItem" },
+          "description": "Footer navigation links."
+        },
+        "social": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/socialLink" },
+          "description": "Social media profile links."
+        }
+      },
+      "additionalProperties": false
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "postsPerPage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "excerptLength": {
+          "type": "integer",
+          "minimum": 50,
+          "maximum": 1000,
+          "default": 200
+        },
+        "dateFormat": {
+          "type": "string",
+          "description": "Date display format string."
+        },
+        "showAuthor": { "type": "boolean", "default": true },
+        "showDate": { "type": "boolean", "default": true },
+        "showTags": { "type": "boolean", "default": true },
+        "showShareButtons": { "type": "boolean", "default": false },
+        "showReadTime": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    },
+    "seo": {
+      "type": "object",
+      "properties": {
+        "titleTemplate": {
+          "type": "string",
+          "description": "Title template. Use %s as placeholder for page title."
+        },
+        "ogImage": {
+          "type": "string",
+          "description": "Default Open Graph image path."
+        },
+        "twitterCard": {
+          "type": "string",
+          "enum": ["summary", "summary_large_image"],
+          "default": "summary_large_image"
+        },
+        "twitterHandle": {
+          "type": "string",
+          "description": "Twitter/X handle without @."
+        }
+      },
+      "additionalProperties": false
+    },
+    "analytics": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": ["string", "null"],
+          "enum": [null, "google", "plausible", "fathom", "umami"],
+          "description": "Analytics provider."
+        },
+        "id": {
+          "type": "string",
+          "description": "Analytics tracking ID."
+        }
+      },
+      "additionalProperties": false
+    },
+    "customContentTypes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Additional content type slugs beyond the defaults (posts, pages)."
+    },
+    "activePlugins": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Slugs of currently active plugins."
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "navItem": {
+      "type": "object",
+      "required": ["label", "url"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "minLength": 1 },
+        "external": { "type": "boolean", "default": false },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/navItem" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "socialLink": {
+      "type": "object",
+      "required": ["platform", "url"],
+      "properties": {
+        "platform": {
+          "type": "string",
+          "enum": [
+            "github",
+            "twitter",
+            "mastodon",
+            "linkedin",
+            "youtube",
+            "instagram",
+            "facebook",
+            "bluesky",
+            "threads",
+            "tiktok",
+            "rss"
+          ]
+        },
+        "url": { "type": "string", "format": "uri" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

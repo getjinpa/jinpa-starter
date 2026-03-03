@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://jinpa.dev/schemas/theme.config.v1.json",
+  "title": "Jinpa Theme Configuration",
+  "description": "Schema for Jinpa platform theme.config.json files (v1).",
+  "type": "object",
+  "required": ["version", "name", "slug", "author"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "JSON Schema URI for editor validation."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Theme configuration schema version."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Human-readable theme name."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 60,
+      "description": "URL-safe identifier for the theme."
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Theme author name."
+    },
+    "authorUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Author website URL."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "Short description of the theme."
+    },
+    "license": {
+      "type": "string",
+      "enum": ["free", "MIT", "Apache-2.0", "GPL-3.0", "proprietary"],
+      "description": "Theme license."
+    },
+    "preview": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to a live preview of the theme."
+    },
+    "thumbnail": {
+      "type": "string",
+      "description": "Path to theme thumbnail image."
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "colors": {
+          "type": "object",
+          "properties": {
+            "primary": { "$ref": "#/definitions/colorValue" },
+            "secondary": { "$ref": "#/definitions/colorValue" },
+            "accent": { "$ref": "#/definitions/colorValue" },
+            "background": { "$ref": "#/definitions/colorValue" },
+            "surface": { "$ref": "#/definitions/colorValue" },
+            "text": { "$ref": "#/definitions/colorValue" },
+            "textMuted": { "$ref": "#/definitions/colorValue" }
+          },
+          "additionalProperties": { "$ref": "#/definitions/colorValue" },
+          "description": "Theme color palette."
+        },
+        "fonts": {
+          "type": "object",
+          "properties": {
+            "heading": { "type": "string" },
+            "body": { "type": "string" },
+            "mono": { "type": "string" }
+          },
+          "additionalProperties": { "type": "string" },
+          "description": "Font family stacks."
+        },
+        "spacing": {
+          "type": "object",
+          "properties": {
+            "unit": {
+              "type": "string",
+              "description": "Base spacing unit (e.g. \"1rem\")."
+            },
+            "scale": {
+              "type": "array",
+              "items": { "type": "number" },
+              "description": "Multiplier scale applied to the base unit."
+            }
+          },
+          "additionalProperties": false
+        },
+        "borderRadius": {
+          "type": "string",
+          "description": "Default border radius value."
+        },
+        "maxWidth": {
+          "type": "string",
+          "description": "Maximum content width."
+        }
+      },
+      "additionalProperties": true,
+      "description": "Visual design tokens for the theme."
+    },
+    "features": {
+      "type": "object",
+      "properties": {
+        "darkMode": { "type": "boolean", "default": true },
+        "search": { "type": "boolean", "default": true },
+        "rss": { "type": "boolean", "default": true },
+        "sitemap": { "type": "boolean", "default": true },
+        "viewTransitions": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": { "type": "boolean" },
+      "description": "Feature toggles for the theme."
+    },
+    "contentTypes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Content type slugs natively supported by this theme."
+    },
+    "customSettings": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Theme-specific custom settings."
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "colorValue": {
+      "type": "string",
+      "description": "CSS color value (hex, rgb, hsl, named color, or CSS variable)."
+    }
+  }
+}
