@@ -3,8 +3,8 @@ title: "མིག་ཆུའི་གཏིང་འཚོལ་བ་དང་
 date: 2026-02-03
 description: "མིག་ཆུ་ཐིགས་པ་ལས་སྐྱེས་པའི་བོད་ཡིག་གི་གལ་གནད་དང་ང་ཚོའི་འགན་འཁྲི་ལ་གྲུབ་པའི་བསམ་གཞིག་དང་སྨོན་ལམ།"
 author: "Tsering Dolma"
-image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop&q=80"
-image_alt: "Himalayan mountain peaks rising above the clouds in golden morning light"
+image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=630&fit=crop&q=80"
+image_alt: "Colorful Tibetan prayer flags strung across mountain air"
 tags: ["བོད་སྐད།", "སྨོན་ལམ།", "རིག་གཞུང་།", "language", "culture"]
 categories: ["personal", "tibetan"]
 lang: "bo"
