@@ -21,15 +21,20 @@ const pagefindJs = withBase('/_pagefind/pagefind-ui.js');
     if (!pagefindJs) return;
 
     try {
-      // @ts-ignore - Pagefind is loaded at runtime
-      const { PagefindUI } = await import(/* @vite-ignore */ pagefindJs);
+      // pagefind-ui.js is an IIFE — no ES module exports, but it sets
+      // window.PagefindUI as a side-effect when the script runs.
+      // We import() to execute it, then read the global it populated.
+      await import(/* @vite-ignore */ pagefindJs);
+      // @ts-ignore
+      const PagefindUI = window.PagefindUI;
+      if (typeof PagefindUI !== 'function') throw new Error('PagefindUI not available');
       new PagefindUI({
         element: '#pagefind-search',
         showSubResults: true,
         showImages: false,
       });
     } catch {
-      // Pagefind not available (e.g., during dev)
+      // Pagefind not available (e.g., during local dev without a build)
       el.innerHTML = '<p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">Search is available after building the site.</p>';
     }
   }
