@@ -43,9 +43,9 @@
         <p class="text-muted" style="margin-bottom:1rem;">One-time setup. Your token is encrypted with your password and never stored in plain text.</p>
         <div class="form-group">
           <label for="setup-token">GitHub Token</label>
-          <input type="password" id="setup-token" placeholder="github_pat_xxxxxxxxxxxx" autocomplete="off">
+          <input type="password" id="setup-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
           <div class="form-hint">
-            <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">Create a fine-grained token</a> with <strong>Contents: Read &amp; Write</strong> permission for your repo.
+            <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=Jinpa%20Admin" target="_blank" rel="noopener">Create a classic token</a> with <strong>repo</strong> and <strong>workflow</strong> scopes. Set expiration to <strong>No expiration</strong>.
           </div>
         </div>
         <div class="form-group">
