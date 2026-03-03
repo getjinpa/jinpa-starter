@@ -1,9 +1,9 @@
 ---
 // Pagefind search integration
-// Pagefind generates its index at build time in /pagefind/
+// Pagefind v1 generates its index at build time in /_pagefind/
 import { withBase } from '../../utils/paths';
-const pagefindCss = withBase('/pagefind/pagefind-ui.css');
-const pagefindJs = withBase('/pagefind/pagefind-ui.js');
+const pagefindCss = withBase('/_pagefind/pagefind-ui.css');
+const pagefindJs = withBase('/_pagefind/pagefind-ui.js');
 ---
 
 <div class="search-container" id="search">

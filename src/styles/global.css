@@ -9,6 +9,80 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* --------------------------------------------------------------------------
+   Tibetan Fonts — self-hosted (unicode-range means these only load on pages
+   that contain Tibetan script characters U+0F00–0FFF)
+   Sourced from TermaFoundry (termafoundry.com) — SIL OFL licensed
+   -------------------------------------------------------------------------- */
+
+/* Jomolhari — warm, classical Uchen; best for long-form reading */
+@font-face {
+  font-family: 'Jomolhari';
+  src: url('/fonts/jomolhari-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0F00-0FFF, U+0020-007E;
+}
+
+/* Noto Serif Tibetan — modern, screen-optimised */
+@font-face {
+  font-family: 'Noto Serif Tibetan';
+  src: url('/fonts/noto-serif-tibetan-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0F00-0FFF, U+0020-007E;
+}
+@font-face {
+  font-family: 'Noto Serif Tibetan';
+  src: url('/fonts/noto-serif-tibetan-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0F00-0FFF, U+0020-007E;
+}
+
+/* Noto Sans Tibetan — clean sans-serif for UI/headings */
+@font-face {
+  font-family: 'Noto Sans Tibetan';
+  src: url('/fonts/noto-sans-tibetan.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0F00-0FFF, U+0020-007E;
+}
+
+/* Qomolangma Uchen Sarchen — THDL Qomolangma project, formal large Uchen */
+@font-face {
+  font-family: 'Qomolangma Uchen Sarchen';
+  src: url('/fonts/qomolangma-uchen-sarchen.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0F00-0FFF, U+0020-007E;
+}
+
+/* Qomolangma Betsu — compact Uchen style */
+@font-face {
+  font-family: 'Qomolangma Betsu';
+  src: url('/fonts/qomolangma-betsu.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0F00-0FFF, U+0020-007E;
+}
+
+/* Qomolangma Tsutong — short-headed display Uchen */
+@font-face {
+  font-family: 'Qomolangma Tsutong';
+  src: url('/fonts/qomolangma-tsutong.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0F00-0FFF, U+0020-007E;
+}
+
+/* --------------------------------------------------------------------------
    CSS Custom Properties - Light Theme (Default)
    -------------------------------------------------------------------------- */
 :root {
@@ -1227,4 +1301,95 @@ html[data-theme="dark"] .site-header {
     color: #000;
     background: #fff;
   }
+}
+
+/* ==========================================================================
+   Tibetan Script Rendering
+   Derived from termaUI (termafoundry.com) — rules for high-quality Tibetan
+   ========================================================================== */
+
+/* Base rule: applied to any element with the Tibetan language attribute.
+   Tibetan glyphs render ~15% smaller visually than Latin at the same font-size,
+   so 1.1em is used to restore visual parity. */
+:lang(bo),
+[lang="bo"] {
+  font-family: 'Jomolhari', 'Noto Serif Tibetan', 'Qomolangma Uchen Sarchen', serif;
+  font-size: 1.1em;
+  line-height: 1.8;          /* critical — Tibetan vowel marks extend above the baseline */
+  word-break: keep-all;      /* prevents the browser from breaking at every tsheg (་) */
+  overflow-wrap: anywhere;   /* fallback for very long strings without tsheg */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "liga" 1, "blws" 1, "abvs" 1; /* OpenType stacking features */
+}
+
+/* Vowel mark clipping protection: Tibetan vowels (ི ུ ེ ོ) and stacked
+   consonants extend above/below the box. A small padding-block gives them room. */
+article[lang="bo"],
+.post-content[lang="bo"],
+[lang="bo"] p,
+[lang="bo"] blockquote {
+  padding-block: 0.15em;
+}
+
+/* Headings in Tibetan — tighter line-height since headings are usually one line */
+[lang="bo"] h1,
+[lang="bo"] h2,
+[lang="bo"] h3 {
+  font-family: 'Noto Serif Tibetan', 'Jomolhari', 'Qomolangma Uchen Sarchen', serif;
+  line-height: 1.6;
+}
+
+/* Prevent double-shad (། །) from splitting across lines */
+.bo-shad-pair {
+  white-space: nowrap;
+}
+
+/* Inline Tibetan within English text: align vertically with surrounding Latin */
+.bo-inline {
+  font-family: 'Jomolhari', 'Noto Serif Tibetan', serif;
+  font-size: 1.1em;
+  line-height: inherit;
+  vertical-align: middle;
+}
+
+/* Search page */
+.search-page {
+  padding-block: var(--space-16);
+}
+
+.search-page h1 {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--space-8);
+}
+
+/* Pagefind UI overrides — match site design */
+.pagefind-ui {
+  --pagefind-ui-scale: 1;
+  --pagefind-ui-primary: var(--color-primary);
+  --pagefind-ui-text: var(--color-text);
+  --pagefind-ui-background: var(--color-bg);
+  --pagefind-ui-border: var(--color-border);
+  --pagefind-ui-tag: var(--color-bg-alt);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: var(--radius-md);
+  --pagefind-ui-font: var(--font-body);
+}
+
+/* Search icon link in header */
+.search-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast), background var(--transition-fast);
+  text-decoration: none;
+}
+
+.search-link:hover {
+  color: var(--color-text);
+  background: var(--color-bg-alt);
 }

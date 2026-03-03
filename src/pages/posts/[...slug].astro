@@ -24,6 +24,7 @@ const { Content, headings } = await render(post);
   tags={post.data.tags}
   headings={headings}
   content={post.body || ''}
+  lang={post.data.lang}
 >
   <Content />
 </Post>
