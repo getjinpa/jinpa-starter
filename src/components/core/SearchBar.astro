@@ -2,12 +2,17 @@
 // Pagefind search integration
 // Pagefind v1 generates its index at build time in /_pagefind/
 import { withBase } from '../../utils/paths';
-const pagefindCss = withBase('/_pagefind/pagefind-ui.css');
-const pagefindJs = withBase('/_pagefind/pagefind-ui.js');
+const pagefindCss    = withBase('/_pagefind/pagefind-ui.css');
+const pagefindJs     = withBase('/_pagefind/pagefind-ui.js');
+const pagefindBundle = withBase('/_pagefind/');   // explicit bundle dir
 ---
 
 <div class="search-container" id="search">
-  <div id="pagefind-search" data-pagefind-js={pagefindJs}></div>
+  <div
+    id="pagefind-search"
+    data-pagefind-js={pagefindJs}
+    data-pagefind-bundle={pagefindBundle}
+  ></div>
 </div>
 
 <link href={pagefindCss} rel="stylesheet" />
@@ -28,8 +33,14 @@ const pagefindJs = withBase('/_pagefind/pagefind-ui.js');
       // @ts-ignore
       const PagefindUI = window.PagefindUI;
       if (typeof PagefindUI !== 'function') throw new Error('PagefindUI not available');
+
+      // pagefind-ui.js uses document.currentScript.src to auto-detect its bundle
+      // directory, but document.currentScript is null for dynamic import().
+      // We pass bundlePath explicitly so it can find pagefind.js and the index.
+      const pagefindBundle = el.dataset.pagefindBundle;
       new PagefindUI({
         element: '#pagefind-search',
+        bundlePath: pagefindBundle,
         showSubResults: true,
         showImages: false,
       });
