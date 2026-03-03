@@ -1,5 +1,7 @@
 ---
 import { withBase } from '../../utils/paths';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   post: any;
@@ -21,19 +23,44 @@ const displayExcerpt = excerpt || description || '';
 // Calculate reading time from body
 const words = post.body ? post.body.split(/\s+/).length : 0;
 const readingTime = Math.max(1, Math.ceil(words / 200));
+
+// Resolve local images (stored in src/assets/images/ by the admin) to
+// Astro ImageMetadata so the <Image> component can optimise them at build
+// time (WebP conversion, dimension hints, lazy loading). External URLs
+// (Unsplash, CDN, etc.) fall through to a plain <img> tag untouched.
+const localImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/**/*.{jpg,jpeg,png,webp,avif,svg}'
+);
+
+let resolvedLocalImage: ImageMetadata | undefined;
+if (image && !image.startsWith('http://') && !image.startsWith('https://')) {
+  const key = image.startsWith('/') ? image : '/' + image;
+  const loader = localImages[key];
+  if (loader) resolvedLocalImage = (await loader()).default;
+}
 ---
 
 <article class="post-card">
   {image && (
     <a href={postUrl} class="post-card-image" aria-hidden="true" tabindex="-1">
-      <img
-        src={image}
-        alt={image_alt || title}
-        width={600}
-        height={338}
-        loading="lazy"
-        decoding="async"
-      />
+      {resolvedLocalImage ? (
+        <Image
+          src={resolvedLocalImage}
+          alt={image_alt || title}
+          width={600}
+          height={338}
+          loading="lazy"
+        />
+      ) : (
+        <img
+          src={image}
+          alt={image_alt || title}
+          width={600}
+          height={338}
+          loading="lazy"
+          decoding="async"
+        />
+      )}
     </a>
   )}
 

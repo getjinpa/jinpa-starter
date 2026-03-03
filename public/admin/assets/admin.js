@@ -1031,26 +1031,84 @@
       });
     },
 
-    /** Upload an image */
+    /** Upload an image.
+     *
+     * Raster images (JPG, PNG, WebP …) are first run through a Canvas pipeline
+     * in the browser: scaled down to a 1920px ceiling on the longest side and
+     * re-encoded as JPEG at 85 % quality. This means images are already
+     * web-optimised before they leave the browser — no server or CDN needed.
+     *
+     * SVG and GIF bypass the Canvas pipeline and are stored as-is (SVGs are
+     * vector, GIFs may be animated).
+     *
+     * Files are committed to src/assets/images/YYYY/MM/ so Astro's <Image>
+     * component can further optimise them (WebP conversion, size hints) at
+     * build time. */
     uploadImage: function (file) {
       var self = this;
       var now = new Date();
       var yyyy = now.getFullYear();
       var mm = String(now.getMonth() + 1).padStart(2, '0');
-      var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-').toLowerCase();
-      var uploadPath = this.imagesPath + '/' + yyyy + '/' + mm + '/' + safeName;
 
       return new Promise(function (resolve, reject) {
-        var reader = new FileReader();
-        reader.onload = function () {
-          var base64 = reader.result.split(',')[1];
-          Cache.clear();
-          GitHub.uploadFile(uploadPath, base64, 'Upload image: ' + safeName)
-            .then(resolve)
-            .catch(reject);
+
+        /** Commit a Blob or File to GitHub as base64. */
+        function _commit(blob, filename) {
+          var uploadPath = self.imagesPath + '/' + yyyy + '/' + mm + '/' + filename;
+          var reader = new FileReader();
+          reader.onload = function () {
+            var base64 = reader.result.split(',')[1];
+            Cache.clear();
+            GitHub.uploadFile(uploadPath, base64, 'Upload image: ' + filename)
+              .then(resolve)
+              .catch(reject);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        }
+
+        // SVG and GIF: store verbatim (vector / possibly animated)
+        if (file.type === 'image/svg+xml' || file.type === 'image/gif') {
+          var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-').toLowerCase();
+          _commit(file, safeName);
+          return;
+        }
+
+        // Raster images: resize ≤ 1920px on longest side, recompress JPEG 85%
+        var objectUrl = URL.createObjectURL(file);
+        var img = new window.Image();
+
+        img.onload = function () {
+          URL.revokeObjectURL(objectUrl);
+
+          var MAX = 1920;
+          var w = img.naturalWidth;
+          var h = img.naturalHeight;
+          if (w > MAX || h > MAX) {
+            if (w >= h) { h = Math.round(h * MAX / w); w = MAX; }
+            else        { w = Math.round(w * MAX / h); h = MAX; }
+          }
+
+          var canvas = document.createElement('canvas');
+          canvas.width  = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+          canvas.toBlob(function (blob) {
+            var base = file.name
+              .replace(/\.[^.]+$/, '')          // strip extension
+              .replace(/[^a-zA-Z0-9_-]/g, '-')  // sanitise
+              .toLowerCase();
+            _commit(blob, base + '.jpg');
+          }, 'image/jpeg', 0.85);
         };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+
+        img.onerror = function () {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error('Could not read image file'));
+        };
+
+        img.src = objectUrl;
       });
     },
 

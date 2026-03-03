@@ -3,6 +3,8 @@ import Base from './Base.astro';
 import TableOfContents from '../components/core/TableOfContents.astro';
 import ReadTime from '../components/core/ReadTime.astro';
 import Share from '../components/core/Share.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
@@ -37,6 +39,20 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 });
 
 const shareUrl = Astro.url.href;
+
+// Resolve local images (stored in src/assets/images/ by the admin) to
+// Astro ImageMetadata so the hero <Image> is optimised at build time.
+// External URLs (https://...) bypass this and render as a plain <img>.
+const localImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/**/*.{jpg,jpeg,png,webp,avif,svg}'
+);
+
+let resolvedLocalImage: ImageMetadata | undefined;
+if (image && !image.startsWith('http://') && !image.startsWith('https://')) {
+  const key = image.startsWith('/') ? image : '/' + image;
+  const loader = localImages[key];
+  if (loader) resolvedLocalImage = (await loader()).default;
+}
 ---
 
 <Base title={title} description={description} image={image} article={true}>
@@ -65,14 +81,24 @@ const shareUrl = Astro.url.href;
 
     {image && (
       <div class="post-featured-image container">
-        <img
-          src={image}
-          alt={image_alt || title}
-          width={1200}
-          height={630}
-          loading="eager"
-          decoding="async"
-        />
+        {resolvedLocalImage ? (
+          <Image
+            src={resolvedLocalImage}
+            alt={image_alt || title}
+            width={1200}
+            height={630}
+            loading="eager"
+          />
+        ) : (
+          <img
+            src={image}
+            alt={image_alt || title}
+            width={1200}
+            height={630}
+            loading="eager"
+            decoding="async"
+          />
+        )}
       </div>
     )}
 
