@@ -1130,6 +1130,9 @@
 
       var html = '';
 
+      // Jinpa updates widget (populated async after render)
+      html += '<div id="jinpa-updates-widget"></div>';
+
       // Stats
       html += '<div class="stats-grid">';
       html += '<div class="stat-card"><div class="stat-icon blue"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"/><path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"/></svg></div><div class="stat-label">Posts</div><div class="stat-value">' + posts.length + '</div></div>';
@@ -1165,8 +1168,101 @@
       html += '</div>';
 
       render(html);
+      fetchJinpaUpdates();
     }).catch(function (err) {
       showError(err.message);
+    });
+  }
+
+  // ---- Jinpa Updates Widget ----
+
+  var JINPA_UPDATES_URL = 'https://getjinpa.com/updates.json';
+  var JINPA_UPDATES_CACHE_KEY = 'jinpa_updates_cache';
+  var JINPA_DISMISSED_KEY = 'jinpa_dismissed';
+
+  function fetchJinpaUpdates() {
+    // Try sessionStorage cache (1 hour TTL)
+    try {
+      var cached = sessionStorage.getItem(JINPA_UPDATES_CACHE_KEY);
+      if (cached) {
+        var parsed = JSON.parse(cached);
+        if (Date.now() - parsed.ts < 3600000) {
+          renderUpdatesWidget(parsed.data);
+          return;
+        }
+      }
+    } catch (e) {}
+
+    fetch(JINPA_UPDATES_URL)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        try {
+          sessionStorage.setItem(JINPA_UPDATES_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data }));
+        } catch (e) {}
+        renderUpdatesWidget(data);
+      })
+      .catch(function () { /* fail silently — no internet or endpoint down */ });
+  }
+
+  function renderUpdatesWidget(data) {
+    var widget = document.getElementById('jinpa-updates-widget');
+    if (!widget) return;
+
+    var dismissed = [];
+    try { dismissed = JSON.parse(localStorage.getItem(JINPA_DISMISSED_KEY) || '[]'); } catch (e) {}
+
+    var html = '<style>'
+      + '.jinpa-announcement{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:.875rem 1rem;border-radius:.5rem;border:1px solid;margin-bottom:.5rem;}'
+      + '.announcement-info{background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.2);}'
+      + '.announcement-warning{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);}'
+      + '.announcement-success{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);}'
+      + '.announcement-content{display:flex;flex-direction:column;gap:.25rem;font-size:.875rem;}'
+      + '.announcement-content strong{font-weight:600;}'
+      + '.announcement-dismiss{flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--text-tertiary);padding:.125rem;border-radius:.25rem;display:flex;line-height:1;}'
+      + '.announcement-dismiss:hover{color:var(--text-primary);}'
+      + '.jinpa-tip{display:flex;align-items:flex-start;gap:.625rem;padding:.75rem 1rem;background:var(--bg-surface-raised);border-radius:.5rem;border:1px solid var(--border-color);font-size:.8125rem;color:var(--text-secondary);margin-bottom:1rem;}'
+      + '.jinpa-tip svg{flex-shrink:0;margin-top:.1rem;color:var(--color-primary);}'
+      + '</style>';
+
+    // Announcements (non-dismissed)
+    var announcements = (data.announcements || []).filter(function (a) {
+      return dismissed.indexOf(a.id) === -1;
+    });
+    announcements.forEach(function (a) {
+      var cls = 'announcement-' + (a.type || 'info');
+      html += '<div class="jinpa-announcement ' + cls + '" data-ann-id="' + esc(a.id) + '">';
+      html += '<div class="announcement-content"><strong>' + esc(a.title) + '</strong><span>' + esc(a.body) + '</span></div>';
+      if (a.dismissible) {
+        html += '<button class="announcement-dismiss" data-dismiss="' + esc(a.id) + '" title="Dismiss">'
+          + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+          + '</button>';
+      }
+      html += '</div>';
+    });
+
+    // Random tip
+    var tips = data.tips || [];
+    if (tips.length > 0) {
+      var tip = tips[Math.floor(Math.random() * tips.length)];
+      html += '<div class="jinpa-tip">'
+        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+        + '<span>' + esc(tip.text) + '</span>'
+        + '</div>';
+    }
+
+    widget.innerHTML = html;
+
+    // Dismiss button listeners
+    widget.querySelectorAll('[data-dismiss]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-dismiss');
+        var list = [];
+        try { list = JSON.parse(localStorage.getItem(JINPA_DISMISSED_KEY) || '[]'); } catch (e) {}
+        if (list.indexOf(id) === -1) list.push(id);
+        try { localStorage.setItem(JINPA_DISMISSED_KEY, JSON.stringify(list)); } catch (e) {}
+        var ann = widget.querySelector('[data-ann-id="' + id + '"]');
+        if (ann) ann.remove();
+      });
     });
   }
 

@@ -1,6 +1,6 @@
 # Jinpa Starter Blog
 
-A clean, fast blog template — part of the [Jinpa](https://jinpa.dev) platform. Deploy to GitHub Pages in minutes, manage content with the built-in admin panel.
+A clean, fast blog template — part of the [Jinpa](https://getjinpa.com) platform. Deploy to GitHub Pages in minutes, manage content with the built-in admin panel.
 
 ## What you get
 
@@ -12,7 +12,7 @@ A clean, fast blog template — part of the [Jinpa](https://jinpa.dev) platform.
 
 ## Deploy this template
 
-**The easy way** — use [jinpa.dev](https://jinpa.dev) to set everything up in a few clicks.
+**The easy way** — use [jinpa.dev](https://getjinpa.com) to set everything up in a few clicks.
 
 **The manual way:**
 

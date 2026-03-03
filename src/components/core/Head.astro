@@ -58,6 +58,14 @@ const ogImage = image ? new URL(withBase(image), siteUrl).href : undefined;
   href={new URL(withBase('/rss.xml'), siteUrl).href}
 />
 
+<!-- AI-readable content index (llms.txt) -->
+<link
+  rel="alternate"
+  type="text/plain"
+  title="AI-readable content index"
+  href={new URL(withBase('/llms.txt'), siteUrl).href}
+/>
+
 <!-- Structured Data -->
 {article ? (
   <script
@@ -69,13 +77,16 @@ const ogImage = image ? new URL(withBase(image), siteUrl).href : undefined;
       description: description,
       image: ogImage,
       url: canonicalUrl,
+      inLanguage: siteConfig.site.language || 'en',
       author: {
         '@type': 'Person',
         name: siteConfig.site.author?.name,
+        url: siteConfig.site.author?.url || undefined,
       },
       publisher: {
         '@type': 'Organization',
         name: siteConfig.site.title,
+        url: new URL(withBase('/'), siteUrl).href,
       },
     })}
   />
@@ -88,6 +99,7 @@ const ogImage = image ? new URL(withBase(image), siteUrl).href : undefined;
       name: siteConfig.site.title,
       description: siteConfig.site.description,
       url: new URL(withBase('/'), siteUrl).href,
+      inLanguage: siteConfig.site.language || 'en',
     })}
   />
 )}

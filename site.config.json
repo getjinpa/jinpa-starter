@@ -1,5 +1,5 @@
 {
-  "$schema": "https://jinpa.dev/schemas/site.config.v1.json",
+  "$schema": "https://getjinpa.com/schemas/site.config.v1.json",
   "version": 1,
 
   "site": {
@@ -56,5 +56,7 @@
   },
 
   "customContentTypes": [],
-  "activePlugins": ["reading-progress"]
+  "activePlugins": ["reading-progress"],
+
+  "jinpaKey": ""
 }

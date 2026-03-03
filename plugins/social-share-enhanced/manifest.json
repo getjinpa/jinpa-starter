@@ -1,14 +1,14 @@
 {
-  "$schema": "https://jinpa.dev/schemas/plugin.manifest.v1.json",
+  "$schema": "https://getjinpa.com/schemas/plugin.manifest.v1.json",
   "specVersion": 1,
   "name": "Social Share Enhanced",
   "slug": "social-share-enhanced",
   "version": "1.0.0",
   "description": "Enhanced social sharing with support for WhatsApp, Telegram, Reddit, Email, and Copy Link, plus a floating mobile share button.",
   "author": "Jinpa Team",
-  "authorUrl": "https://jinpa.dev",
+  "authorUrl": "https://getjinpa.com",
   "license": "free",
-  "homepage": "https://jinpa.dev/plugins/social-share-enhanced",
+  "homepage": "https://getjinpa.com/plugins/social-share-enhanced",
   "repository": "https://github.com/jinpa-platform/plugin-social-share-enhanced",
   "compatibility": {
     "jinpa": ">=1.0.0",

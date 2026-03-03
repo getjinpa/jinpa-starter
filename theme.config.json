@@ -1,5 +1,5 @@
 {
-  "$schema": "https://jinpa.dev/schemas/theme.config.v1.json",
+  "$schema": "https://getjinpa.com/schemas/theme.config.v1.json",
   "version": 1,
   "name": "Starter Blog",
   "slug": "starter-blog",

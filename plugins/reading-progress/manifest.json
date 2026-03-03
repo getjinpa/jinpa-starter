@@ -1,14 +1,14 @@
 {
-  "$schema": "https://jinpa.dev/schemas/plugin.manifest.v1.json",
+  "$schema": "https://getjinpa.com/schemas/plugin.manifest.v1.json",
   "specVersion": 1,
   "name": "Reading Progress",
   "slug": "reading-progress",
   "version": "1.0.0",
   "description": "A reading progress bar that shows how far through a post the reader has scrolled.",
   "author": "Jinpa Team",
-  "authorUrl": "https://jinpa.dev",
+  "authorUrl": "https://getjinpa.com",
   "license": "free",
-  "homepage": "https://jinpa.dev/plugins/reading-progress",
+  "homepage": "https://getjinpa.com/plugins/reading-progress",
   "repository": "https://github.com/jinpa-platform/plugin-reading-progress",
   "compatibility": {
     "jinpa": ">=1.0.0",

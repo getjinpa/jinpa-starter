@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://jinpa.dev/schemas/theme.config.v1.json",
+  "$id": "https://getjinpa.com/schemas/theme.config.v1.json",
   "title": "Jinpa Theme Configuration",
   "description": "Schema for Jinpa platform theme.config.json files (v1).",
   "type": "object",
