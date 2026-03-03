@@ -3,7 +3,7 @@ title: "The Language of Color in Tibetan Art"
 date: 2025-12-08
 description: "In Tibetan Buddhist art, every color is a word. Here is a guide to reading the palette — what white, red, gold, blue, and green mean when they appear in a thangka."
 author: "Tsering Dolma"
-image: "https://picsum.photos/seed/tibetan-colors/1200/630"
+image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1200&h=630&fit=crop&q=80"
 image_alt: "Rows of mineral pigment powders — blue lapis, vermillion, malachite green, white chalk"
 tags: ["thangka", "color", "symbolism", "buddhist-art", "technique"]
 categories: ["art", "education"]

@@ -3,7 +3,7 @@ title: "Between Mountains and Sky: My London Exhibition"
 date: 2026-01-20
 description: "In October 2025 I showed fifteen paintings at a gallery in East London. Here is what I learned from standing in a room with strangers while they looked at my work."
 author: "Tsering Dolma"
-image: "https://picsum.photos/seed/london-gallery-art/1200/630"
+image: "https://images.unsplash.com/photo-1577083553173-bf7b9bafbf3e?w=1200&h=630&fit=crop&q=80"
 image_alt: "Gallery space with thangka paintings illuminated on white walls"
 tags: ["exhibition", "london", "contemporary", "reflection"]
 categories: ["news", "personal"]

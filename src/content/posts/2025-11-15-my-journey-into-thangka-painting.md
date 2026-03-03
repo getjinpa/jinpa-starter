@@ -3,7 +3,7 @@ title: "My Journey into Thangka Painting"
 date: 2025-11-15
 description: "How I found my way to traditional Tibetan thangka painting — from watching my uncle grind lapis lazuli in Lhasa to studying under a master in Dharamsala."
 author: "Tsering Dolma"
-image: "https://picsum.photos/seed/thangka-journey/1200/630"
+image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&h=630&fit=crop&q=80"
 image_alt: "Artist mixing mineral pigments on a stone grinding palette"
 tags: ["thangka", "personal", "tradition", "beginnings"]
 categories: ["personal"]

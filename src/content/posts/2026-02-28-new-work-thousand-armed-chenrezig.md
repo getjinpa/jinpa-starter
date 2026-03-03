@@ -3,7 +3,7 @@ title: "New Work: The Thousand-Armed Chenrezig"
 date: 2026-02-28
 description: "Four months into my most ambitious thangka to date — the Thousand-Armed form of Chenrezig, bodhisattva of compassion. On what it means to paint boundlessness."
 author: "Tsering Dolma"
-image: "https://picsum.photos/seed/chenrezig-gold/1200/630"
+image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&h=630&fit=crop&q=80"
 image_alt: "Close detail of gold outlines and mineral pigments on a thangka in progress"
 tags: ["chenrezig", "thangka", "new-work", "buddhist-art", "process"]
 categories: ["art", "new-work"]
