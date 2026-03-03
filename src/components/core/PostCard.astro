@@ -6,7 +6,8 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { title, date, description, excerpt, image, image_alt, tags = [] } = post.data;
+const { title, date, description, excerpt, image, image_alt, tags = [], lang = 'en' } = post.data;
+const langAttr = lang !== 'en' ? lang : undefined;
 
 const formattedDate = new Date(date).toLocaleDateString('en-US', {
   year: 'numeric',
@@ -44,17 +45,17 @@ const readingTime = Math.max(1, Math.ceil(words / 200));
     </div>
 
     <h2 class="post-card-title">
-      <a href={postUrl}>{title}</a>
+      <a href={postUrl} lang={langAttr}>{title}</a>
     </h2>
 
     {displayExcerpt && (
-      <p class="post-card-excerpt">{displayExcerpt}</p>
+      <p class="post-card-excerpt" lang={langAttr}>{displayExcerpt}</p>
     )}
 
     {tags.length > 0 && (
       <div class="post-card-tags">
         {tags.slice(0, 3).map((tag: string) => (
-          <span class="tag">{tag}</span>
+          <span class="tag" lang={langAttr}>{tag}</span>
         ))}
       </div>
     )}

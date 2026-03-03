@@ -533,6 +533,19 @@ html[data-theme="dark"] .site-header {
   text-align: center;
 }
 
+.footer-termaui {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+  opacity: 0.7;
+}
+
+.footer-termaui a {
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* --------------------------------------------------------------------------
    Hero Section
    -------------------------------------------------------------------------- */
@@ -1346,6 +1359,21 @@ article[lang="bo"],
    tall as English ones. Tags are UI chrome, not body text. */
 article[lang="bo"] .tag,
 [lang="bo"] .tag {
+  line-height: 1.2;
+  font-size: var(--font-size-xs);
+}
+
+/* Post-card titles and excerpts: prefer Noto Serif Tibetan (screen-optimised,
+   better hinting at small sizes) over the calligraphic Jomolhari used in body
+   text. Also tighten line-height slightly for the compact card layout. */
+.post-card-title [lang="bo"],
+.post-card-excerpt [lang="bo"] {
+  font-family: 'Noto Serif Tibetan', 'Jomolhari', var(--font-body), serif;
+  line-height: 1.7;
+}
+
+/* Post-card tags that carry a lang attribute still need compact sizing */
+.post-card-tags .tag[lang] {
   line-height: 1.2;
   font-size: var(--font-size-xs);
 }
