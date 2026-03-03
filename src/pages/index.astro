@@ -15,7 +15,18 @@ const recentPosts = sortedPosts.slice(0, siteConfig.content?.postsPerPage || 10)
 <Base>
   <section class="hero">
     <div class="container">
+      <div class="hero-avatar-wrap">
+        <img
+          src="https://picsum.photos/seed/tsering-portrait/160/160"
+          alt={siteConfig.site.author?.name || siteConfig.site.title}
+          class="hero-avatar"
+          width="80"
+          height="80"
+          loading="eager"
+        />
+      </div>
       <h1 class="hero-title">{siteConfig.site.title}</h1>
+      <p class="hero-tagline">Thangka Painter · Contemporary Artist · Dharamsala</p>
       <p class="hero-description">{siteConfig.site.description}</p>
       <a href={withBase('/posts/')} class="hero-cta">
         Read the blog

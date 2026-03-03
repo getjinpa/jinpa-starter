@@ -3,16 +3,16 @@
   "version": 1,
 
   "site": {
-    "title": "My Website",
-    "description": "A personal website and blog.",
+    "title": "Tsering Dolma",
+    "description": "Thangka painter and contemporary Tibetan artist based in Dharamsala, India. Writing about art, tradition, and life in the Himalayas.",
     "url": "https://username.github.io",
     "basePath": "",
     "language": "en",
     "languages": ["en"],
-    "timezone": "America/New_York",
+    "timezone": "Asia/Kolkata",
     "author": {
-      "name": "Your Name",
-      "email": "",
+      "name": "Tsering Dolma",
+      "email": "tsering@example.com",
       "url": ""
     }
   },
@@ -24,11 +24,11 @@
       { "label": "About", "url": "/about/" }
     ],
     "footer": [
-      { "label": "Privacy", "url": "/privacy/" }
+      { "label": "About", "url": "/about/" }
     ],
     "social": [
-      { "platform": "github", "url": "" },
-      { "platform": "twitter", "url": "" }
+      { "platform": "instagram", "url": "https://instagram.com/tseringdolmaart" },
+      { "platform": "twitter", "url": "https://twitter.com/tseringdolma" }
     ]
   },
 
@@ -44,10 +44,10 @@
   },
 
   "seo": {
-    "titleTemplate": "%s — My Website",
+    "titleTemplate": "%s — Tsering Dolma",
     "ogImage": "/site/og-default.jpg",
     "twitterCard": "summary_large_image",
-    "twitterHandle": ""
+    "twitterHandle": "tseringdolma"
   },
 
   "analytics": {

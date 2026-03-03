@@ -12,26 +12,26 @@
    CSS Custom Properties - Light Theme (Default)
    -------------------------------------------------------------------------- */
 :root {
-  /* Colors */
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-light: #dbeafe;
-  --color-secondary: #7c3aed;
-  --color-secondary-hover: #6d28d9;
-  --color-accent: #f59e0b;
+  /* Colors — warm Tibetan palette */
+  --color-primary: #b5451b;
+  --color-primary-hover: #943a16;
+  --color-primary-light: #fde8de;
+  --color-secondary: #6b4c1e;
+  --color-secondary-hover: #5a3f19;
+  --color-accent: #d4951a;
   --color-bg: #ffffff;
-  --color-bg-alt: #f8fafc;
+  --color-bg-alt: #fdf9f5;
   --color-surface: #ffffff;
-  --color-surface-hover: #f1f5f9;
-  --color-text: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
-  --color-border: #e2e8f0;
-  --color-border-hover: #cbd5e1;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-code-bg: #f1f5f9;
+  --color-surface-hover: #fdf3ec;
+  --color-text: #271400;
+  --color-text-secondary: #6b4c1e;
+  --color-text-muted: #a08060;
+  --color-border: #e8d5c4;
+  --color-border-hover: #d4b896;
+  --color-success: #2d8a4e;
+  --color-warning: #d4951a;
+  --color-error: #c0392b;
+  --color-code-bg: #fdf3ec;
 
   /* Typography */
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -90,25 +90,25 @@
    Dark Theme
    -------------------------------------------------------------------------- */
 html[data-theme="dark"] {
-  --color-primary: #3b82f6;
-  --color-primary-hover: #60a5fa;
-  --color-primary-light: #1e3a5f;
-  --color-secondary: #8b5cf6;
-  --color-secondary-hover: #a78bfa;
-  --color-accent: #fbbf24;
-  --color-bg: #0f172a;
-  --color-bg-alt: #1e293b;
-  --color-surface: #1e293b;
-  --color-surface-hover: #334155;
-  --color-text: #f1f5f9;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
-  --color-border: #334155;
-  --color-border-hover: #475569;
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
+  --color-primary: #e87a50;
+  --color-primary-hover: #f09070;
+  --color-primary-light: #4a2010;
+  --color-secondary: #c49a6c;
+  --color-secondary-hover: #d4aa80;
+  --color-accent: #f5c040;
+  --color-bg: #1c0f07;
+  --color-bg-alt: #2a1a0e;
+  --color-surface: #2a1a0e;
+  --color-surface-hover: #3d2714;
+  --color-text: #f5ede4;
+  --color-text-secondary: #d4b896;
+  --color-text-muted: #a08060;
+  --color-border: #3d2714;
+  --color-border-hover: #5a3d24;
+  --color-success: #5cb87a;
+  --color-warning: #f5c040;
   --color-error: #f87171;
-  --color-code-bg: #1e293b;
+  --color-code-bg: #2a1a0e;
 
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
@@ -466,6 +466,28 @@ html[data-theme="dark"] .site-header {
   padding: var(--space-20) 0;
   text-align: center;
   background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-alt) 100%);
+}
+
+.hero-avatar-wrap {
+  margin-bottom: var(--space-6);
+}
+
+.hero-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 3px solid var(--color-primary-light);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.hero-tagline {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: var(--space-3);
 }
 
 .hero-title {

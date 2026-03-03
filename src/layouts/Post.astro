@@ -3,14 +3,13 @@ import Base from './Base.astro';
 import TableOfContents from '../components/core/TableOfContents.astro';
 import ReadTime from '../components/core/ReadTime.astro';
 import Share from '../components/core/Share.astro';
-import { Image } from 'astro:assets';
 
 interface Props {
   title: string;
   date: Date;
   description?: string;
   author?: string;
-  image?: ImageMetadata;
+  image?: string;
   image_alt?: string;
   tags?: string[];
   headings?: { depth: number; slug: string; text: string }[];
@@ -38,7 +37,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 const shareUrl = Astro.url.href;
 ---
 
-<Base title={title} description={description} image={image?.src} article={true}>
+<Base title={title} description={description} image={image} article={true}>
   <slot name="before-content" />
 
   <article class="post-article">
@@ -64,11 +63,13 @@ const shareUrl = Astro.url.href;
 
     {image && (
       <div class="post-featured-image container">
-        <Image
+        <img
           src={image}
           alt={image_alt || title}
           width={1200}
           height={630}
+          loading="eager"
+          decoding="async"
         />
       </div>
     )}

@@ -3,22 +3,22 @@
   "version": 1,
   "name": "Starter Blog",
   "slug": "starter-blog",
-  "author": "Vajradog",
-  "authorUrl": "https://himalayanelders.org",
-  "description": "A clean, minimal blog theme.",
+  "author": "Jinpa",
+  "authorUrl": "https://getjinpa.com",
+  "description": "A clean, minimal blog theme with dark mode, search, and RSS.",
   "license": "free",
-  "preview": "https://example.github.io/starter-blog/",
+  "preview": "https://getjinpa.github.io/jinpa-starter/",
   "thumbnail": "/site/theme-thumbnail.jpg",
 
   "settings": {
     "colors": {
-      "primary": "#2563eb",
-      "secondary": "#7c3aed",
-      "accent": "#f59e0b",
+      "primary": "#b5451b",
+      "secondary": "#6b4c1e",
+      "accent": "#d4951a",
       "background": "#ffffff",
-      "surface": "#f8fafc",
-      "text": "#1e293b",
-      "textMuted": "#64748b"
+      "surface": "#fdf9f5",
+      "text": "#271400",
+      "textMuted": "#7a5c45"
     },
     "fonts": {
       "heading": "Inter, system-ui, sans-serif",

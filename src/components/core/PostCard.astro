@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import { withBase } from '../../utils/paths';
 
 interface Props {
@@ -26,11 +25,13 @@ const readingTime = Math.max(1, Math.ceil(words / 200));
 <article class="post-card">
   {image && (
     <a href={postUrl} class="post-card-image" aria-hidden="true" tabindex="-1">
-      <Image
+      <img
         src={image}
         alt={image_alt || title}
         width={600}
         height={338}
+        loading="lazy"
+        decoding="async"
       />
     </a>
   )}
