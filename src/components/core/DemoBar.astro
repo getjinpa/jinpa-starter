@@ -13,6 +13,7 @@ const isDemo = !!(siteConfig as any).demo;
   <>
     <aside class="demo-bar" id="jinpa-demo-bar" aria-label="Jinpa template preview">
       <div class="demo-bar-inner">
+        <button class="demo-bar-close" id="jinpa-demo-close" aria-label="Dismiss banner">×</button>
         <span class="demo-badge">DEMO</span>
         <p class="demo-bar-msg">Jinpa Template &nbsp;·&nbsp; This is a fictional website</p>
         <a
@@ -21,7 +22,6 @@ const isDemo = !!(siteConfig as any).demo;
           target="_blank"
           rel="noopener noreferrer"
         >Use&nbsp;this&nbsp;template →</a>
-        <button class="demo-bar-close" id="jinpa-demo-close" aria-label="Dismiss banner">×</button>
       </div>
     </aside>
 
@@ -106,7 +106,6 @@ const isDemo = !!(siteConfig as any).demo;
 
   .demo-bar-close {
     flex-shrink: 0;
-    margin-left: auto;
     background: transparent;
     border: none;
     color: rgba(255, 255, 255, 0.4);
