@@ -709,7 +709,7 @@ html[data-theme="dark"] .site-header {
 }
 
 .post-card-excerpt {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
   line-height: 1.6;
   display: -webkit-box;
@@ -898,16 +898,10 @@ html[data-theme="dark"] .site-header {
 }
 
 .post-header-title {
-  font-size: var(--font-size-4xl);
+  font-size: clamp(1.5rem, 5vw, var(--font-size-5xl));
   font-weight: 800;
   letter-spacing: -0.03em;
   margin-bottom: var(--space-4);
-}
-
-@media (min-width: 768px) {
-  .post-header-title {
-    font-size: var(--font-size-5xl);
-  }
 }
 
 .post-header-meta {
