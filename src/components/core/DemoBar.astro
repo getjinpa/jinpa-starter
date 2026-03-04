@@ -1,59 +1,64 @@
 ---
 /**
- * DemoBar — "Use this template" promotional bar
- *
- * Appears at the bottom of the page when `demo: true` is set in
- * site.config.json.  Automatically hidden on real sites:
- *
- *   1. The Jinpa setup wizard sets `demo: false` when the user
- *      publishes their own copy.
- *   2. Users can also manually set  "demo": false  in site.config.json.
+ * DemoBar — top "Use this template" banner shown on Jinpa demo sites.
+ * Controlled by `demo: true` in site.config.json.
+ * Disappears automatically when users publish their own site (demo → false).
+ * Visitors can also dismiss it for the session with the × button.
  */
 import siteConfig from '../../../site.config.json';
-
-const isDemo  = !!(siteConfig as any).demo;
-const message = (siteConfig as any).demoMessage
-  ?? 'Sample template — content & organisation are fictional';
+const isDemo = !!(siteConfig as any).demo;
 ---
 
 {isDemo && (
   <>
-    <aside class="demo-bar" id="jinpa-demo-bar" aria-label="Template preview notice">
+    <aside class="demo-bar" id="jinpa-demo-bar" aria-label="Jinpa template preview">
       <div class="demo-bar-inner">
-
         <span class="demo-badge">DEMO</span>
-
-        <p class="demo-bar-msg">{message}</p>
-
+        <p class="demo-bar-msg">Jinpa Template &nbsp;·&nbsp; This is a fictional website</p>
         <a
           href="https://getjinpa.github.io"
           class="demo-bar-cta"
           target="_blank"
           rel="noopener noreferrer"
-        >
-          Use&nbsp;this&nbsp;template →
-        </a>
-
+        >Use&nbsp;this&nbsp;template →</a>
+        <button class="demo-bar-close" id="jinpa-demo-close" aria-label="Dismiss banner">×</button>
       </div>
     </aside>
 
-    {/* Push page content above the fixed bar */}
     <style is:global>
-      body { padding-bottom: 3rem; }
+      body { padding-top: 2.5rem; }
     </style>
+
+    <script is:inline>
+      (function () {
+        var bar   = document.getElementById('jinpa-demo-bar');
+        var close = document.getElementById('jinpa-demo-close');
+        if (!bar || !close) return;
+        if (sessionStorage.getItem('jinpa-demo-dismissed') === '1') {
+          bar.style.display = 'none';
+          document.body.style.paddingTop = '';
+          return;
+        }
+        close.addEventListener('click', function () {
+          bar.style.display = 'none';
+          document.body.style.paddingTop = '';
+          sessionStorage.setItem('jinpa-demo-dismissed', '1');
+        });
+      })();
+    </script>
   </>
 )}
 
 <style>
   .demo-bar {
     position: fixed;
-    bottom: 0;
+    top: 0;
     left: 0;
     right: 0;
     z-index: 9999;
     background: #111827;
-    border-top: 2px solid #3D6B4F;   /* Jinpa sage green */
-    padding: 0.55rem 1.5rem;
+    border-bottom: 2px solid #3D6B4F;
+    padding: 0.45rem 1.25rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 0.8rem;
     line-height: 1.4;
@@ -76,11 +81,12 @@ const message = (siteConfig as any).demoMessage
     letter-spacing: 0.12em;
     padding: 0.15rem 0.5rem;
     border-radius: 3px;
+    text-transform: uppercase;
   }
 
   .demo-bar-msg {
     flex: 1;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.65);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -91,15 +97,29 @@ const message = (siteConfig as any).demoMessage
     flex-shrink: 0;
     background: #3D6B4F;
     color: #fff;
-    padding: 0.3rem 1rem;
+    padding: 0.28rem 0.9rem;
     border-radius: 999px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     text-decoration: none;
     white-space: nowrap;
     transition: background 0.2s;
   }
   .demo-bar-cta:hover { background: #2E5340; }
+
+  .demo-bar-close {
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 1.15rem;
+    line-height: 1;
+    padding: 0.1rem 0.35rem;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: color 0.15s;
+  }
+  .demo-bar-close:hover { color: rgba(255, 255, 255, 0.85); }
 
   @media (max-width: 480px) {
     .demo-bar-msg { display: none; }
