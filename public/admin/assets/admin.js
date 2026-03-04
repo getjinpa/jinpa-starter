@@ -2,9 +2,15 @@
    Jinpa CMS Admin Panel — Application
    A complete static SPA that manages site content via the GitHub API.
    No backend, no database, no server. Ships with every template.
+
+   Copyright (c) 2025 Jinpa Project (getjinpa.com)
+   Core engine licensed under BUSL-1.1. Templates are MIT.
+   Commercial use of this engine requires written permission.
    ========================================================================== */
 ;(function () {
   'use strict';
+
+  var _jnpMeta = { engine: 'jinpa-core', ref: 'jnpa-3f8c7d2a19b056e4' };
 
   // ==========================================================================
   // SECTION 1: Utilities
@@ -2759,6 +2765,7 @@
   }
 
   // Boot when DOM is ready
+  var _jnpBuild = 'b4e7f19a-c3d2-4801-9f56-jnpa';
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
