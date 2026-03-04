@@ -53,7 +53,7 @@ if (image && !image.startsWith('http://') && !image.startsWith('https://')) {
         />
       ) : (
         <img
-          src={image}
+          src={withBase(image)}
           alt={image_alt || title}
           width={600}
           height={338}
