@@ -467,6 +467,16 @@ html[data-theme="dark"] .site-header {
   text-decoration: none;
 }
 
+/* Mobile: disable backdrop-filter so position:fixed children (mobile-nav)
+   are positioned relative to the viewport, not the header's stacking context. */
+@media (max-width: 767px) {
+  .site-header {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: var(--color-bg); /* fully opaque on mobile */
+  }
+}
+
 /* --------------------------------------------------------------------------
    Footer
    -------------------------------------------------------------------------- */
