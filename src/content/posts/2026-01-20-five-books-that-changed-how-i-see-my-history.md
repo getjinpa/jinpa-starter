@@ -3,7 +3,7 @@ title: "Five Books That Changed How I Understand My Own History"
 date: 2026-01-20
 description: "A Tibetan reader on five books — memoir, history, fiction — that reshaped what she thought she knew about her own people's story."
 author: "Tsering Dolma"
-image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1200&h=630&fit=crop&q=80"
+image: "/images/photo-1524995997946-a1c2e315a42f.jpg"
 image_alt: "Rows of books on library shelves in warm light"
 tags: ["books", "reading", "tibet", "history", "memoir"]
 categories: ["books", "culture"]

@@ -3,7 +3,7 @@ title: "Why I Still Write in Tibetan (Even Though It Is Harder)"
 date: 2026-02-28
 description: "On the choice to write in a minority language — the smaller audience, the technical difficulties, and why it matters anyway."
 author: "Tsering Dolma"
-image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop&q=80"
+image: "/images/photo-1506905925346-21bda4d32df4.jpg"
 image_alt: "Dramatic Himalayan mountain peaks rising above the clouds in golden light"
 tags: ["tibetan-language", "writing", "culture", "language-preservation", "identity"]
 categories: ["language", "culture"]

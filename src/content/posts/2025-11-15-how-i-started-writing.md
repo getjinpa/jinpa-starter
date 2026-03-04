@@ -3,7 +3,7 @@ title: "How I Started Writing: Finding Words for a Life in Between"
 date: 2025-11-15
 description: "On growing up between Tibetan and English, and how writing became the way I learned to make sense of both."
 author: "Tsering Dolma"
-image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&h=630&fit=crop&q=80"
+image: "/images/photo-1455390582262-044cdead277a.jpg"
 image_alt: "Open notebook and pen on a wooden desk beside a window"
 tags: ["personal", "writing", "language", "beginnings"]
 categories: ["personal"]

@@ -3,7 +3,7 @@ title: "Losar in Dharamsala: How We Celebrate the New Year Far from Home"
 date: 2025-12-08
 description: "Tibetan New Year — Losar — looks different in Dharamsala than it does in Lhasa. Here is what we have kept, what has changed, and what I miss."
 author: "Tsering Dolma"
-image: "https://images.unsplash.com/photo-1533130061792-64b345e4a833?w=1200&h=630&fit=crop&q=80"
+image: "/images/photo-1533130061792-64b345e4a833.jpg"
 image_alt: "Colorful Tibetan prayer flags strung across a mountain valley"
 tags: ["losar", "tibetan-new-year", "culture", "traditions", "dharamsala"]
 categories: ["culture", "personal"]
