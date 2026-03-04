@@ -1,0 +1,107 @@
+---
+/**
+ * DemoBar — "Use this template" promotional bar
+ *
+ * Appears at the bottom of the page when `demo: true` is set in
+ * site.config.json.  Automatically hidden on real sites:
+ *
+ *   1. The Jinpa setup wizard sets `demo: false` when the user
+ *      publishes their own copy.
+ *   2. Users can also manually set  "demo": false  in site.config.json.
+ */
+import siteConfig from '../../../site.config.json';
+
+const isDemo  = !!(siteConfig as any).demo;
+const message = (siteConfig as any).demoMessage
+  ?? 'Sample template — content & organisation are fictional';
+---
+
+{isDemo && (
+  <>
+    <aside class="demo-bar" id="jinpa-demo-bar" aria-label="Template preview notice">
+      <div class="demo-bar-inner">
+
+        <span class="demo-badge">DEMO</span>
+
+        <p class="demo-bar-msg">{message}</p>
+
+        <a
+          href="https://getjinpa.github.io"
+          class="demo-bar-cta"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Use&nbsp;this&nbsp;template →
+        </a>
+
+      </div>
+    </aside>
+
+    {/* Push page content above the fixed bar */}
+    <style is:global>
+      body { padding-bottom: 3rem; }
+    </style>
+  </>
+)}
+
+<style>
+  .demo-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: #111827;
+    border-top: 2px solid #3D6B4F;   /* Jinpa sage green */
+    padding: 0.55rem 1.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .demo-bar-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .demo-badge {
+    flex-shrink: 0;
+    background: #3D6B4F;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+  }
+
+  .demo-bar-msg {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .demo-bar-cta {
+    flex-shrink: 0;
+    background: #3D6B4F;
+    color: #fff;
+    padding: 0.3rem 1rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .demo-bar-cta:hover { background: #2E5340; }
+
+  @media (max-width: 480px) {
+    .demo-bar-msg { display: none; }
+  }
+</style>

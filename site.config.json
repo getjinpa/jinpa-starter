@@ -1,6 +1,8 @@
 {
   "$schema": "https://getjinpa.com/schemas/site.config.v1.json",
   "version": 1,
+  "demo": true,
+  "demoMessage": "Sample template — Tsering Dolma is a fictional character",
 
   "site": {
     "title": "Tsering Dolma",
