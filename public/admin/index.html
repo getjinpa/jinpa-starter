@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <title>Admin — Jinpa CMS</title>
-  <link rel="stylesheet" href="assets/admin.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/getjinpa/jinpa-starter@main/public/admin/assets/admin.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,35 +34,44 @@
           <input type="password" id="unlock-password" placeholder="Enter your password" autocomplete="current-password">
         </div>
         <button class="btn btn-primary btn-block" id="unlock-submit">Unlock</button>
-        <button class="btn btn-ghost btn-block btn-sm" id="switch-to-setup" style="margin-top:0.75rem;">Use a different account or token</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.75rem;gap:0.5rem;">
+          <button class="btn btn-ghost btn-block btn-sm" id="switch-to-setup">Use a different account</button>
+          <button class="btn btn-ghost btn-sm" id="forgot-password-btn" style="white-space:nowrap;color:var(--text-muted);">Forgot password?</button>
+        </div>
       </div>
 
-      <!-- FIRST-TIME SETUP: PAT + password -->
+      <!-- FIRST-TIME SETUP: repo lookup + optional PAT -->
       <div class="login-method" id="setup-form" style="display:none;">
         <h3>Connect Your Site</h3>
-        <p class="text-muted" style="margin-bottom:1rem;">One-time setup. Your token is encrypted with your password and never stored in plain text.</p>
-        <div class="form-group">
-          <label for="setup-token">GitHub Token</label>
-          <input type="password" id="setup-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
-          <div class="form-hint">
-            <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=Jinpa%20Admin" target="_blank" rel="noopener">Create a classic token</a> with <strong>repo</strong> and <strong>workflow</strong> scopes. Set expiration to <strong>No expiration</strong>.
-          </div>
-        </div>
+        <p class="text-muted" style="margin-bottom:1rem;">Enter your repository to auto-load credentials, or enter a token manually.</p>
         <div class="form-group">
           <label for="setup-repo">Repository</label>
-          <input type="text" id="setup-repo" placeholder="your-username/your-site" autocomplete="off">
+          <div style="display:flex;gap:0.5rem;">
+            <input type="text" id="setup-repo" placeholder="your-username/your-site" autocomplete="off" style="flex:1;">
+            <button class="btn btn-secondary btn-sm" type="button" id="lookup-repo-btn" style="white-space:nowrap;">Look Up</button>
+          </div>
+          <div id="vault-lookup-status" style="display:none;margin-top:0.5rem;font-size:0.8125rem;padding:0.4rem 0.6rem;border-radius:6px;"></div>
         </div>
-        <div class="form-group">
-          <label for="setup-branch">Branch</label>
-          <input type="text" id="setup-branch" placeholder="main" value="main" autocomplete="off">
+        <div id="token-field-group">
+          <div class="form-group">
+            <label for="setup-token">GitHub Token</label>
+            <input type="password" id="setup-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+            <div class="form-hint">
+              <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=Jinpa%20Admin" target="_blank" rel="noopener">Create a classic token</a> with <strong>repo</strong> and <strong>workflow</strong> scopes.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="setup-branch">Branch</label>
+            <input type="text" id="setup-branch" placeholder="main" value="main" autocomplete="off">
+          </div>
         </div>
         <hr style="margin:1.25rem 0;border:0;border-top:1px solid var(--border);">
         <div class="form-group">
-          <label for="setup-password">Choose a Password</label>
-          <input type="password" id="setup-password" placeholder="You'll use this to log in" autocomplete="new-password">
-          <div class="form-hint">This password encrypts your token. Choose something you'll remember.</div>
+          <label for="setup-password" id="setup-password-label">Password</label>
+          <input type="password" id="setup-password" placeholder="Your admin password" autocomplete="current-password">
+          <div class="form-hint" id="setup-password-hint">Minimum 8 characters. Encrypts your token — never stored in plain text.</div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="setup-password2-group">
           <label for="setup-password2">Confirm Password</label>
           <input type="password" id="setup-password2" placeholder="Type it again" autocomplete="new-password">
         </div>
@@ -172,6 +181,6 @@
     </div>
   </div>
 
-  <script src="assets/admin.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/getjinpa/jinpa-starter@main/public/admin/assets/admin.js"></script>
 </body>
 </html>

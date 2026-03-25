@@ -1482,7 +1482,14 @@
     html += '</div>';
 
     // Featured Image
-    html += '<div class="form-group"><label for="post-image">Featured Image</label><input type="text" id="post-image" value="' + esc(fm.image || fm.heroImage || '') + '" placeholder="/src/assets/images/2024/01/photo.jpg"><div class="form-hint">Path to an image in your media library.</div></div>';
+    html += '<div class="form-group"><label for="post-image">Featured Image</label>';
+    html += '<div class="image-upload-row">';
+    html += '<input type="text" id="post-image" value="' + esc(fm.image || fm.heroImage || '') + '" placeholder="/src/assets/images/2024/01/photo.jpg">';
+    html += '<label class="btn btn-secondary btn-upload" id="post-image-upload-btn"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>Upload<input type="file" id="post-image-file" accept="image/*" style="display:none"></label>';
+    html += '</div>';
+    html += '<div class="form-hint">Path to an image in your media library, or upload a new one.</div>';
+    html += '<div id="post-image-preview" style="margin-top:6px;display:none;"><img id="post-image-preview-img" style="max-width:100%;max-height:200px;border-radius:6px;"></div>';
+    html += '</div>';
 
     // Draft
     html += '<div class="form-check"><input type="checkbox" id="post-draft"' + (fm.draft ? ' checked' : '') + '><label for="post-draft">Save as draft</label></div>';
@@ -1536,6 +1543,47 @@
       titleInput.addEventListener('input', function () {
         slugInput.value = slugify(titleInput.value);
       });
+    }
+
+    // Featured image upload
+    var imageFileInput = document.getElementById('post-image-file');
+    var imagePathInput = document.getElementById('post-image');
+    var imagePreview = document.getElementById('post-image-preview');
+    var imagePreviewImg = document.getElementById('post-image-preview-img');
+    var uploadBtn = document.getElementById('post-image-upload-btn');
+
+    imageFileInput.addEventListener('change', function () {
+      var file = imageFileInput.files[0];
+      if (!file) return;
+      uploadBtn.classList.add('uploading');
+      uploadBtn.innerHTML = '<span class="spinner-sm"></span>Uploading...';
+      Content.uploadImage(file).then(function () {
+        var now = new Date();
+        var yyyy = now.getFullYear();
+        var mm = String(now.getMonth() + 1).padStart(2, '0');
+        var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-').toLowerCase();
+        var filePath = '/src/assets/images/' + yyyy + '/' + mm + '/' + safeName;
+        imagePathInput.value = filePath;
+        // Show preview
+        var previewUrl = URL.createObjectURL(file);
+        imagePreviewImg.src = previewUrl;
+        imagePreview.style.display = 'block';
+        Toast.show('Image uploaded!', 'success');
+      }).catch(function (err) {
+        Toast.show('Upload failed: ' + err.message, 'error');
+      }).finally(function () {
+        uploadBtn.classList.remove('uploading');
+        uploadBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>Upload';
+        imageFileInput.value = '';
+      });
+    });
+
+    // Show preview if image path already set
+    if (imagePathInput.value) {
+      var existingPath = imagePathInput.value.replace(/^\//, '');
+      var rawBase = 'https://raw.githubusercontent.com/' + GitHub.owner + '/' + GitHub.repo + '/' + (GitHub.branch || 'main') + '/';
+      imagePreviewImg.src = rawBase + existingPath;
+      imagePreviewImg.onload = function () { imagePreview.style.display = 'block'; };
     }
 
     // Markdown toolbar
@@ -2645,21 +2693,114 @@
     });
 
     // ---- SETUP FORM (first-time) ----
-    document.getElementById('setup-submit').addEventListener('click', function () {
-      var token = document.getElementById('setup-token').value.trim();
-      var repo = document.getElementById('setup-repo').value.trim();
-      var branch = document.getElementById('setup-branch').value.trim() || 'main';
-      var pw1 = document.getElementById('setup-password').value;
-      var pw2 = document.getElementById('setup-password2').value;
 
-      if (!token) { Toast.show('Please enter a GitHub token.', 'error'); return; }
+    // Vault lookup: fetch .jinpa/vault.json from a public repo — no auth needed
+    var vaultLoadedFromRepo = false;
+
+    function setLookupStatus(msg, type) {
+      var el = document.getElementById('vault-lookup-status');
+      if (!el) return;
+      el.style.display = msg ? 'block' : 'none';
+      el.textContent = msg;
+      el.style.background = type === 'success' ? 'rgba(16,185,129,0.1)' : type === 'error' ? 'rgba(239,68,68,0.1)' : 'rgba(0,0,0,0.05)';
+      el.style.color = type === 'success' ? 'var(--color-success,#059669)' : type === 'error' ? 'var(--color-danger,#dc2626)' : 'var(--text-muted)';
+    }
+
+    document.getElementById('lookup-repo-btn').addEventListener('click', function () {
+      var repo = document.getElementById('setup-repo').value.trim();
+      if (!repo) { Toast.show('Enter a repository name first (owner/repo).', 'error'); return; }
+      if (!/^[a-zA-Z0-9._-]+\/[a-zA-Z0-9._-]+$/.test(repo)) {
+        Toast.show('Format: owner/repo (e.g. "myname/my-site").', 'error');
+        return;
+      }
+
+      var btn = document.getElementById('lookup-repo-btn');
+      btn.disabled = true;
+      btn.textContent = 'Looking…';
+      setLookupStatus('Checking repository…', 'info');
+      vaultLoadedFromRepo = false;
+
+      // Fetch vault from raw.githubusercontent.com — public, no auth
+      fetch('https://raw.githubusercontent.com/' + repo + '/main/.jinpa/vault.json')
+        .then(function (res) {
+          if (!res.ok) throw new Error('not found');
+          return res.json();
+        })
+        .then(function (vault) {
+          if (!vault.encrypted || !vault.repo) throw new Error('invalid vault');
+          // Store vault in localStorage — it's encrypted, safe to store
+          localStorage.setItem(Auth.STORAGE_KEY, JSON.stringify({
+            encrypted: vault.encrypted,
+            repo: vault.repo,
+            branch: vault.branch || 'main',
+          }));
+          vaultLoadedFromRepo = true;
+          // Hide token/branch fields (not needed — vault is already here)
+          var tokenGroup = document.getElementById('token-field-group');
+          if (tokenGroup) tokenGroup.style.display = 'none';
+          // Switch password fields to unlock mode (no confirm needed)
+          var pw2Group = document.getElementById('setup-password2-group');
+          if (pw2Group) pw2Group.style.display = 'none';
+          var pwLabel = document.getElementById('setup-password-label');
+          if (pwLabel) pwLabel.textContent = 'Password';
+          var pwHint = document.getElementById('setup-password-hint');
+          if (pwHint) pwHint.textContent = 'Enter the password you set when creating this site.';
+          var submitBtn = document.getElementById('setup-submit');
+          if (submitBtn) submitBtn.textContent = 'Unlock';
+          setLookupStatus('✓ Credentials found in your repository. Enter your password to unlock.', 'success');
+          setTimeout(function () { document.getElementById('setup-password').focus(); }, 100);
+        })
+        .catch(function () {
+          vaultLoadedFromRepo = false;
+          var tokenGroup = document.getElementById('token-field-group');
+          if (tokenGroup) tokenGroup.style.display = '';
+          setLookupStatus('No saved credentials found. Enter your GitHub token below to set up manually.', 'error');
+        })
+        .finally(function () {
+          btn.disabled = false;
+          btn.textContent = 'Look Up';
+        });
+    });
+
+    document.getElementById('setup-submit').addEventListener('click', function () {
+      var repo = document.getElementById('setup-repo').value.trim();
+      var pw1 = document.getElementById('setup-password').value;
+
       if (!repo) { Toast.show('Please enter a repository (owner/repo).', 'error'); return; }
       if (!/^[a-zA-Z0-9._-]+\/[a-zA-Z0-9._-]+$/.test(repo)) {
         Toast.show('Repository format: owner/repo (e.g., "myname/my-site").', 'error');
         return;
       }
+      if (!pw1) { Toast.show('Please enter your password.', 'error'); return; }
+
+      // If vault was loaded from the repo, just unlock with the password
+      if (vaultLoadedFromRepo) {
+        var btn = document.getElementById('setup-submit');
+        btn.disabled = true;
+        btn.textContent = 'Unlocking...';
+        Auth.unlock(pw1).then(function (user) {
+          document.getElementById('setup-password').value = '';
+          Toast.show('Welcome back, ' + user.login + '!', 'success');
+          showApp();
+          Router.start();
+        }).catch(function (err) {
+          Toast.show(err.message || 'Wrong password. Please try again.', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Unlock';
+          document.getElementById('setup-password').value = '';
+          document.getElementById('setup-password').focus();
+        });
+        return;
+      }
+
+      // Manual setup: token + repo + password
+      var token = document.getElementById('setup-token').value.trim();
+      var branch = document.getElementById('setup-branch').value.trim() || 'main';
+      var pw2 = document.getElementById('setup-password2').value;
+
+      if (!token) { Toast.show('Please enter a GitHub token.', 'error'); return; }
       if (!pw1) { Toast.show('Please choose a password.', 'error'); return; }
-      if (pw1.length < 4) { Toast.show('Password must be at least 4 characters.', 'error'); return; }
+      if (pw1.length < 8) { Toast.show('Password must be at least 8 characters.', 'error'); return; }
       if (pw1 !== pw2) { Toast.show('Passwords do not match.', 'error'); return; }
 
       var btn = document.getElementById('setup-submit');
@@ -2682,13 +2823,16 @@
     });
 
     // Allow Enter in setup fields
-    ['setup-token', 'setup-repo', 'setup-branch', 'setup-password', 'setup-password2'].forEach(function (id) {
-      document.getElementById(id).addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          document.getElementById('setup-submit').click();
-        }
+    ['setup-token', 'setup-branch', 'setup-password', 'setup-password2'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); document.getElementById('setup-submit').click(); }
       });
+    });
+    // Enter on repo field triggers lookup
+    var repoInput = document.getElementById('setup-repo');
+    if (repoInput) repoInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('lookup-repo-btn').click(); }
     });
 
     // ---- UNLOCK FORM (returning user) ----
@@ -2734,6 +2878,43 @@
         showLogin();
       });
     });
+
+    // Forgot password — clear vault, pre-fill repo, guide through manual re-setup
+    var forgotBtn = document.getElementById('forgot-password-btn');
+    if (forgotBtn) {
+      forgotBtn.addEventListener('click', function () {
+        // Capture repo before resetting (we'll pre-fill it after)
+        var vaultInfo = Auth.getVaultInfo();
+        var savedRepo = vaultInfo ? vaultInfo.repo : '';
+        Modal.confirm('Your password cannot be recovered — it was never stored.\n\nTo reset your access: clear your vault, then re-connect using a new GitHub token and set a new password. Your repository and content are not affected.', {
+          title: 'Forgot Password',
+          okText: 'Reset Access',
+          danger: true
+        }).then(function (ok) {
+          if (!ok) return;
+          Auth.reset();
+          showLogin();
+          // Pre-fill the repo field so the user doesn't have to look it up
+          if (savedRepo) {
+            setTimeout(function () {
+              var repoInput = document.getElementById('setup-repo');
+              if (repoInput) {
+                repoInput.value = savedRepo;
+                repoInput.dispatchEvent(new Event('input'));
+              }
+              // Update password label to clarify it's a new password
+              var pwLabel = document.getElementById('setup-password-label');
+              if (pwLabel) pwLabel.textContent = 'Choose a New Password';
+              var pwHint = document.getElementById('setup-password-hint');
+              if (pwHint) pwHint.textContent = 'Minimum 8 characters. This will become your new admin password.';
+              // Focus the token field so they know what to fill in next
+              var tokenInput = document.getElementById('setup-token');
+              if (tokenInput) tokenInput.focus();
+            }, 50);
+          }
+        });
+      });
+    }
 
     // Check for vault import from setup wizard (passed via URL hash)
     // Format: #/import-vault/BASE64_ENCODED_VAULT_JSON
